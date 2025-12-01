@@ -1,0 +1,60 @@
+{
+    "name": "course-management-server",
+    "version": "1.0.0",
+    "description": "Bike Rental Reservation System Backend using TypeScript, Express and Mongoose",
+    "main": "./dist/server.js",
+    "scripts": {
+        "start": "node dist/server.js",
+        "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+        "ts.check": "tsc --project tsconfig.json",
+        "build": "rimraf dist && tsc",
+        "add-build": "git add dist",
+        "commit-build": "git commit -m 'build'",
+        "lint": "npx eslint src --ignore-pattern .ts",
+        "lint:fix": "npx eslint src --fix",
+        "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
+        "prettier:fix": "npx prettier --write src"
+    },
+    "pre-push": [
+        "ts.check",
+        "build",
+        "add-build",
+        "commit-build"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.7.7",
+        "bcrypt": "^5.1.1",
+        "cloudinary": "^2.5.0",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "http-status": "^1.7.4",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.4.0",
+        "multer": "^1.4.5-lts.1",
+        "multer-storage-cloudinary": "^4.0.0",
+        "nodemailer": "^6.9.15",
+        "validator": "^13.12.0",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.3.0",
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.7",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/jsonwebtoken": "^9.0.6",
+        "@types/multer": "^1.4.12",
+        "@types/nodemailer": "^6.4.15",
+        "@types/validator": "^13.12.2",
+        "eslint": "^9.3.0",
+        "pre-push": "^0.1.4",
+        "prettier": "^3.2.5",
+        "rimraf": "^6.0.1",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.4.5",
+        "typescript-eslint": "^7.10.0"
+    }
+}
