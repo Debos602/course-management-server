@@ -1,0 +1,245 @@
+{
+  "info": {
+    "_postman_id": "course-management-collection",
+    "name": "Course Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Student\",\n  \"email\": \"student@example.com\",\n  \"password\": \"Password123!\",\n  \"phone\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login (sets accessToken)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Save access token from response JSON to environment variable 'accessToken'",
+                  "try {",
+                  "  var json = pm.response.json();",
+                  "  if (json && json.token) {",
+                  "    pm.environment.set('accessToken', json.token);",
+                  "    console.log('accessToken set');",
+                  "  } else if (json && json.data && json.data.token) {",
+                  "    pm.environment.set('accessToken', json.data.token);",
+                  "    console.log('accessToken set (data.token)');",
+                  "  }",
+                  "} catch (e) { console.log('No token in response'); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Public - Courses",
+      "item": [
+        {
+          "name": "List Courses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/courses?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Course Details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/courses/:courseId",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", ":courseId"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Student - Course Consumption",
+      "item": [
+        {
+          "name": "Enroll in Course (course route)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{baseUrl}}/courses/:courseId/enroll", "host": ["{{baseUrl}}"], "path": ["courses", ":courseId", "enroll"] }
+          }
+        },
+        {
+          "name": "My Enrolled Courses",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/courses/enrolled", "host": ["{{baseUrl}}"], "path": ["courses", "enrolled"] }
+          }
+        },
+        {
+          "name": "Get Lesson (watch video)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/lessons/:lessonId", "host": ["{{baseUrl}}"], "path": ["lessons", ":lessonId"] }
+          }
+        },
+        {
+          "name": "Mark Lesson Complete",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/courses/:courseId/lessons/:lessonId/complete", "host": ["{{baseUrl}}"], "path": ["courses", ":courseId", "lessons", ":lessonId", "complete"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignments",
+      "item": [
+        {
+          "name": "Submit Assignment (course-scoped)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Assignment 1\",\n  \"submissionLink\": \"https://drive.google.com/xxx\",\n  \"lessonId\": \":lessonId\"\n}" },
+            "url": { "raw": "{{baseUrl}}/courses/:courseId/assignments", "host": ["{{baseUrl}}"], "path": ["courses", ":courseId", "assignments"] }
+          }
+        },
+        {
+          "name": "My Assignments",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/assignments/mine", "host": ["{{baseUrl}}"], "path": ["assignments", "mine"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "Get Quiz",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/quizzes/:quizId", "host": ["{{baseUrl}}"], "path": ["quizzes", ":quizId"] } }
+        },
+        {
+          "name": "Submit Quiz",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{ \"answers\": [0,1,2] }" },
+            "url": { "raw": "{{baseUrl}}/quizzes/:quizId/submit", "host": ["{{baseUrl}}"], "path": ["quizzes", ":quizId", "submit"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enrollments",
+      "item": [
+        {
+          "name": "Enroll (enrollment module)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/enrollments/:courseId/enroll", "host": ["{{baseUrl}}"], "path": ["enrollments", ":courseId", "enroll"] }
+          }
+        },
+        {
+          "name": "My Enrollments (enrollment module)",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ], "url": { "raw": "{{baseUrl}}/enrollments/mine", "host": ["{{baseUrl}}"], "path": ["enrollments", "mine"] } }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin - Create Course",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"New Course\",\n  \"description\": \"Course description\",\n  \"instructor\": \"<instructorId>\",\n  \"instructorName\": \"Instructor Name\",\n  \"price\": 0,\n  \"category\": \"Programming\",\n  \"tags\": [\"js\", \"node\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/admin/courses", "host": ["{{baseUrl}}"], "path": ["admin", "courses"] }
+          }
+        },
+        {
+          "name": "Admin - Get Enrollments by Course",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ], "url": { "raw": "{{baseUrl}}/admin/courses/:courseId/enrollments", "host": ["{{baseUrl}}"], "path": ["admin", "courses", ":courseId", "enrollments"] } }
+        },
+        {
+          "name": "Admin - Get Assignments for Course",
+          "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ], "url": { "raw": "{{baseUrl}}/admin/courses/:courseId/assignments", "host": ["{{baseUrl}}"], "path": ["admin", "courses", ":courseId", "assignments"] } }
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "adminToken", "value": "" }
+  ]
+}

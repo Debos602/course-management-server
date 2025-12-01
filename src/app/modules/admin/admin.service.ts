@@ -3,6 +3,10 @@ import QueryBuilder from '../../builders/QueryBuilder';
 import AppError from '../../errors/AppError';
 import { USER_ROLE, USER_STATUS } from '../user/user.constant';
 import { User } from '../user/user.model';
+import { Course } from '../course/course.model';
+import { Batch } from '../batch/batch.model';
+import { Enrollment } from '../enrollment/enrollment.model';
+import { Assignment } from '../assignment/assignment.model';
 
 
 const getUsersFromDB = async (query: Record<string, unknown>) => {
@@ -176,6 +180,78 @@ const unblockUserIntoDB = async (id: string) => {
     };
 };
 
+// Course Management
+const createCourseInDB = async (payload: Record<string, any>) => {
+    const course = await Course.create(payload);
+    return { statusCode: httpStatus.CREATED, message: 'Course created', data: course };
+};
+
+const updateCourseInDB = async (id: string, payload: Record<string, any>) => {
+    const course = await Course.findByIdAndUpdate(id, payload, { new: true });
+    if (!course) throw new AppError(httpStatus.NOT_FOUND, 'Course not found');
+    return { statusCode: httpStatus.OK, message: 'Course updated', data: course };
+};
+
+const deleteCourseInDB = async (id: string) => {
+    const course = await Course.findByIdAndDelete(id);
+    if (!course) throw new AppError(httpStatus.NOT_FOUND, 'Course not found');
+    return { statusCode: httpStatus.OK, message: 'Course deleted', data: course };
+};
+
+const getCoursesFromDBAdmin = async (query: Record<string, unknown>) => {
+    const courseQuery = new QueryBuilder(Course.find(), query).filter().sort().paginate().fields();
+    const items = await courseQuery.modelQuery;
+    const meta = await courseQuery.countTotal();
+    return { statusCode: httpStatus.OK, message: 'Courses fetched', data: items, meta };
+};
+
+const getCourseByIdFromDB = async (id: string) => {
+    const course = await Course.findById(id).populate({ path: 'syllabus' });
+    if (!course) throw new AppError(httpStatus.NOT_FOUND, 'Course not found');
+    return { statusCode: httpStatus.OK, message: 'Course fetched', data: course };
+};
+
+// Batch Management
+const createBatchInDB = async (payload: Record<string, any>) => {
+    const batch = await Batch.create(payload);
+    return { statusCode: httpStatus.CREATED, message: 'Batch created', data: batch };
+};
+
+const updateBatchInDB = async (id: string, payload: Record<string, any>) => {
+    const batch = await Batch.findByIdAndUpdate(id, payload, { new: true });
+    if (!batch) throw new AppError(httpStatus.NOT_FOUND, 'Batch not found');
+    return { statusCode: httpStatus.OK, message: 'Batch updated', data: batch };
+};
+
+const deleteBatchInDB = async (id: string) => {
+    const batch = await Batch.findByIdAndDelete(id);
+    if (!batch) throw new AppError(httpStatus.NOT_FOUND, 'Batch not found');
+    return { statusCode: httpStatus.OK, message: 'Batch deleted', data: batch };
+};
+
+const getBatchesForCourse = async (courseId: string) => {
+    const batches = await Batch.find({ course: courseId }).select('-__v');
+    return { statusCode: httpStatus.OK, message: 'Batches fetched', data: batches };
+};
+
+// Enrollment management
+const getEnrollmentsByCourse = async (courseId: string) => {
+    const enrollments = await Enrollment.find({ course: courseId }).populate({ path: 'user', select: 'name email' });
+    return { statusCode: httpStatus.OK, message: 'Enrollments fetched', data: enrollments };
+};
+
+const getEnrollmentsByBatch = async (batchId: string) => {
+    const enrollments = await Enrollment.find({ batch: batchId }).populate({ path: 'user', select: 'name email' });
+    return { statusCode: httpStatus.OK, message: 'Enrollments fetched', data: enrollments };
+};
+
+// Assignment review
+const getAssignmentsForCourse = async (courseId: string) => {
+    const assignments = await Assignment.find({ course: courseId }).populate({ path: 'student', select: 'name email' });
+    return { statusCode: httpStatus.OK, message: 'Assignments fetched', data: assignments };
+};
+
+
 
 
 
@@ -187,4 +263,22 @@ export const AdminServices = {
     removeAdminFromDB,
     blockUserIntoDB,
     unblockUserIntoDB
+    ,
+    // courses
+    createCourseInDB,
+    updateCourseInDB,
+    deleteCourseInDB,
+    getCoursesFromDBAdmin,
+    getCourseByIdFromDB,
+    // batches
+    createBatchInDB,
+    updateBatchInDB,
+    deleteBatchInDB,
+    getBatchesForCourse,
+    // enrollments
+    getEnrollmentsByCourse,
+    getEnrollmentsByBatch,
+    // assignments
+    getAssignmentsForCourse,
 };
+

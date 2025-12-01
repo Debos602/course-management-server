@@ -2,11 +2,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AdminServices } from './admin.service';
 
-// Route: /api/v1/admin/posts/ (GET)
-const getPosts = catchAsync(async (req, res) => {
-    const result = await AdminServices.getPostsFromDB(req.query);
-    sendResponse(res, result);
-});
+
 
 // Route: /api/v1/admin/users/ (GET)
 const getUsers = catchAsync(async (req, res) => {
@@ -44,40 +40,96 @@ const unblockUser = catchAsync(async (req, res) => {
     sendResponse(res, result);
 });
 
-// Route: /api/v1/admin/posts/:id/publish (PUT)
-const publishPost = catchAsync(async (req, res) => {
-    const result = await AdminServices.publishPostIntoDB(req.params.id);
+// Courses
+const createCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.createCourseInDB(req.body);
     sendResponse(res, result);
 });
 
-// Route: /api/v1/admin/posts/:id/unpublish (PUT)
-const unpublishPost = catchAsync(async (req, res) => {
-    const result = await AdminServices.unpublishPostIntoDB(req.params.id);
+const updateCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.updateCourseInDB(req.params.id, req.body);
     sendResponse(res, result);
 });
 
-// Route: /api/v1/admin/payments/ (GET)
-const getPayments = catchAsync(async (req, res) => {
-    const result = await AdminServices.getPaymentsFromDB(req.query);
+const deleteCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.deleteCourseInDB(req.params.id);
     sendResponse(res, result);
 });
 
-// Route: /api/v1/admin/payments/:id (DELETE)
-const deletePayment = catchAsync(async (req, res) => {
-    const result = await AdminServices.deletePaymentFromDB(req.params.id);
+const getCourses = catchAsync(async (req, res) => {
+    const result = await AdminServices.getCoursesFromDBAdmin(req.query);
     sendResponse(res, result);
 });
+
+const getCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.getCourseByIdFromDB(req.params.id);
+    sendResponse(res, result);
+});
+
+// Batches
+const createBatch = catchAsync(async (req, res) => {
+    const result = await AdminServices.createBatchInDB(req.body);
+    sendResponse(res, result);
+});
+
+const updateBatch = catchAsync(async (req, res) => {
+    const result = await AdminServices.updateBatchInDB(req.params.id, req.body);
+    sendResponse(res, result);
+});
+
+const deleteBatch = catchAsync(async (req, res) => {
+    const result = await AdminServices.deleteBatchInDB(req.params.id);
+    sendResponse(res, result);
+});
+
+const getBatchesForCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.getBatchesForCourse(req.params.courseId);
+    sendResponse(res, result);
+});
+
+// Enrollments
+const getEnrollmentsForCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.getEnrollmentsByCourse(req.params.courseId);
+    sendResponse(res, result);
+});
+
+const getEnrollmentsForBatch = catchAsync(async (req, res) => {
+    const result = await AdminServices.getEnrollmentsByBatch(req.params.batchId);
+    sendResponse(res, result);
+});
+
+// Assignment review
+const getAssignmentsForCourse = catchAsync(async (req, res) => {
+    const result = await AdminServices.getAssignmentsForCourse(req.params.courseId);
+    sendResponse(res, result);
+});
+
+
 
 export const AdminControllers = {
-    getPosts,
+
     getUsers,
     deleteUser,
     makeAdmin,
     removeAdmin,
     blockUser,
-    unblockUser,
-    publishPost,
-    unpublishPost,
-    getPayments,
-    deletePayment,
+    unblockUser
+    ,
+    // courses
+    createCourse,
+    updateCourse,
+    deleteCourse,
+    getCourses,
+    getCourse,
+    // batches
+    createBatch,
+    updateBatch,
+    deleteBatch,
+    getBatchesForCourse,
+    // enrollments
+    getEnrollmentsForCourse,
+    getEnrollmentsForBatch,
+    // assignments
+    getAssignmentsForCourse,
+
 };

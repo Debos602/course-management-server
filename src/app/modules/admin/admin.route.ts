@@ -27,22 +27,26 @@ router
     .route('/users/:id/unblock')
     .put(auth(USER_ROLE.ADMIN), AdminControllers.unblockUser);
 
-router.route('/posts').get(auth(USER_ROLE.ADMIN), AdminControllers.getPosts);
+// Courses (admin)
+router.route('/courses').get(auth(USER_ROLE.ADMIN), AdminControllers.getCourses);
+router.route('/courses').post(auth(USER_ROLE.ADMIN), AdminControllers.createCourse);
+router.route('/courses/:id').get(auth(USER_ROLE.ADMIN), AdminControllers.getCourse);
+router.route('/courses/:id').put(auth(USER_ROLE.ADMIN), AdminControllers.updateCourse);
+router.route('/courses/:id').delete(auth(USER_ROLE.ADMIN), AdminControllers.deleteCourse);
 
-router
-    .route('/posts/:id/publish')
-    .put(auth(USER_ROLE.ADMIN), AdminControllers.publishPost);
+// Batches
+router.route('/batches').post(auth(USER_ROLE.ADMIN), AdminControllers.createBatch);
+router.route('/batches/:id').put(auth(USER_ROLE.ADMIN), AdminControllers.updateBatch);
+router.route('/batches/:id').delete(auth(USER_ROLE.ADMIN), AdminControllers.deleteBatch);
+router.route('/courses/:courseId/batches').get(auth(USER_ROLE.ADMIN), AdminControllers.getBatchesForCourse);
 
-router
-    .route('/posts/:id/unpublish')
-    .put(auth(USER_ROLE.ADMIN), AdminControllers.unpublishPost);
+// Enrollments
+router.route('/courses/:courseId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForCourse);
+router.route('/batches/:batchId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForBatch);
 
-router
-    .route('/payments/')
-    .get(auth(USER_ROLE.ADMIN), AdminControllers.getPayments);
+// Assignment review
+router.route('/courses/:courseId/assignments').get(auth(USER_ROLE.ADMIN), AdminControllers.getAssignmentsForCourse);
 
-router
-    .route('/payments/:id')
-    .delete(auth(USER_ROLE.ADMIN), AdminControllers.deletePayment);
+
 
 export const AdminRoutes = router;
