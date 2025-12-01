@@ -87,6 +87,13 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         data: {
             accessToken,
             refreshToken,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                avatarURL: user.avatarURL,
+            },
         },
     };
 });

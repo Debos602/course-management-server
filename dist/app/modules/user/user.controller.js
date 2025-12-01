@@ -47,17 +47,11 @@ const updateAvatar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     const result = yield user_service_1.UserServices.updateAvatar(req.user._id, (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path);
     (0, sendResponse_1.default)(res, result);
 }));
-// Route: /api/v1/users/contact-us (POST)
-const contactUs = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.contactUsViaMail(req.body);
-    (0, sendResponse_1.default)(res, result);
-}));
 exports.UserControllers = {
     getUser,
     followUser,
     unfollowUser,
     getMe,
     updateProfile,
-    contactUs,
     updateAvatar,
 };

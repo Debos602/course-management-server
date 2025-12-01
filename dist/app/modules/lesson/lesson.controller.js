@@ -12,16 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-const validateRequest = (schema) => {
-    return (0, catchAsync_1.default)((req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        const parsed = yield schema.parseAsync({
-            body: req.body.data ? JSON.parse(req.body.data) : req.body,
-            cookies: req.cookies,
-        });
-        req.body = parsed.body; // set request body from the parsed data
-        req.cookies = parsed.cookies; // set request cookies from the parsed data
-        next();
-    }));
+exports.LessonControllers = void 0;
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const lesson_service_1 = require("./lesson.service");
+const getLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lesson_service_1.LessonServices.getLessonById(req.params.id);
+    (0, sendResponse_1.default)(res, result);
+}));
+const getByCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lesson_service_1.LessonServices.getLessonsByCourse(req.params.courseId);
+    (0, sendResponse_1.default)(res, result);
+}));
+exports.LessonControllers = {
+    getLesson,
+    getByCourse,
 };
-exports.default = validateRequest;

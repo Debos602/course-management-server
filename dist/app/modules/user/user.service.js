@@ -15,9 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
-const sendMail_1 = require("../../utils/sendMail");
 const user_constant_1 = require("./user.constant");
 const user_model_1 = require("./user.model");
 const getUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -145,28 +143,6 @@ const updateProfileIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, f
         data: updatedUser,
     };
 });
-const contactUsViaMail = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const emailBody = (0, payment_utils_1.replaceText)(user_constant_1.CONTACT_FORM_MESSAGE, {
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone,
-        message: payload.message,
-    });
-    const result = yield (0, sendMail_1.sendMail)({
-        from: payload.email,
-        to: config_1.default.mail_auth_user,
-        subject: `Contact Us Form Submission from ${payload.name}`,
-        html: emailBody,
-    });
-    if (!result.messageId) {
-        throw new AppError_1.default(http_status_1.default.SERVICE_UNAVAILABLE, 'Fail to send email!');
-    }
-    return {
-        statusCode: http_status_1.default.OK,
-        message: 'Email sent successfully',
-        data: null,
-    };
-});
 const updateAvatar = (id, avatarURL) => __awaiter(void 0, void 0, void 0, function* () {
     if (!avatarURL) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Avatar is required');
@@ -189,6 +165,5 @@ exports.UserServices = {
     unfollowUserFromDB,
     getMeFromDB,
     updateProfileIntoDB,
-    contactUsViaMail,
     updateAvatar,
 };

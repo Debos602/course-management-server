@@ -27,7 +27,7 @@ app.get('/', (_req, res) => {
     res.status(http_status_1.default.OK).json({
         success: true,
         statusCode: 200,
-        message: 'App is running successfully!',
+        message: 'Course management server is running successfully!',
     });
 });
 // globalError handler

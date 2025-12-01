@@ -12,27 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PaymentControllers = void 0;
+exports.QuizControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const payment_service_1 = require("./payment.service");
-// Route: /api/v1/payment/initiate-payment (POST)
-const initiatePayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield payment_service_1.PaymentServices.initiatePaymentService(req.body.subscriptionType, req.user, req.query.redirectPath);
+const quiz_service_1 = require("./quiz.service");
+const getQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield quiz_service_1.QuizServices.getQuizById(req.params.id);
     (0, sendResponse_1.default)(res, result);
 }));
-// Route: /api/v1/payment/complete-subscription (POST)
-const confirmSubscription = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield payment_service_1.PaymentServices.confirmSubscription(req.query.TXNID, req.query.redirectPath);
-    res.send(result);
-}));
-// Route: /api/v1/payment/my-subscriptions (GET)
-const getMySubscriptions = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield payment_service_1.PaymentServices.getMySubscriptions(req.user._id, req.query);
+const submit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const userId = (_b = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString();
+    const answers = req.body.answers;
+    const result = yield quiz_service_1.QuizServices.submitQuiz(userId, req.params.id, answers);
     (0, sendResponse_1.default)(res, result);
 }));
-exports.PaymentControllers = {
-    initiatePayment,
-    confirmSubscription,
-    getMySubscriptions,
-};
+exports.QuizControllers = { getQuiz, submit };
