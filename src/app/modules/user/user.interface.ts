@@ -20,10 +20,6 @@ export interface IUser {
     role: IUserRole;
     status: IUserStatus;
     userType: IUserType;
-    subscription: ISubscription;
-    followers: mongoose.Types.ObjectId[];
-    following: mongoose.Types.ObjectId[];
-    posts: mongoose.Types.ObjectId[];
     isDeleted: boolean;
 }
 

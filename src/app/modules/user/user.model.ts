@@ -36,28 +36,7 @@ const UserSchema = new Schema<IUser, UserModel>(
             enum: UserType,
             default: USER_TYPE.BASIC,
         },
-        subscription: {
-            startDate: Date,
-            endDate: Date,
-        },
-        followers: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
-        following: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
-        posts: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Post',
-            },
-        ],
+
         isDeleted: { type: Boolean, default: false },
     },
     {

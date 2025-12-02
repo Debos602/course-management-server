@@ -5,7 +5,6 @@ const CourseSchema = new Schema<ICourse, CourseModel>(
     {
         title: { type: String, required: true },
         description: { type: String },
-        instructor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         instructorName: { type: String, required: true },
         price: { type: Number, default: 0 },
         category: { type: String, index: true },

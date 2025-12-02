@@ -1,15 +1,16 @@
 import express from 'express';
 import verifyToken from '../../middlewares/verifyToken';
 import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
 import { CourseControllers } from './course.controller';
 
 const router = express.Router();
 
 // Public listing with optional token to identify user
-router.route('/').get(verifyToken, CourseControllers.getCourses);
+router.route('/').get(verifyToken, CourseControllers.getCourses).post(auth(USER_ROLE.ADMIN), CourseControllers.createCourse);
 
 // Course details
-router.route('/:id').get(verifyToken, CourseControllers.getCourse);
+router.route('/:id').get(verifyToken, CourseControllers.getCourse).put(auth(USER_ROLE.ADMIN), CourseControllers.updateCourse).delete(auth(USER_ROLE.ADMIN), CourseControllers.deleteCourse);
 
 // Student protected endpoints
 router.route('/enrolled').get(auth(), CourseControllers.getEnrolled);

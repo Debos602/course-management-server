@@ -4,7 +4,6 @@ export interface ICourse {
     _id: mongoose.Types.ObjectId;
     title: string;
     description?: string;
-    instructor: mongoose.Types.ObjectId;
     instructorName: string;
     price: number;
     category?: string;

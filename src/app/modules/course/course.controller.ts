@@ -1,6 +1,7 @@
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { CourseServices } from './course.service';
+import { AdminServices } from '../admin/admin.service';
 
 const getCourses = catchAsync(async (req, res) => {
     const result = await CourseServices.getCourses(req.query);
@@ -63,4 +64,17 @@ export const CourseControllers = {
     markComplete,
     submitAssignment,
     submitQuiz,
+    // admin actions
+    createCourse: catchAsync(async (req, res) => {
+        const result = await AdminServices.createCourseInDB(req.body);
+        sendResponse(res, result as any);
+    }),
+    updateCourse: catchAsync(async (req, res) => {
+        const result = await AdminServices.updateCourseInDB(req.params.id, req.body);
+        sendResponse(res, result as any);
+    }),
+    deleteCourse: catchAsync(async (req, res) => {
+        const result = await AdminServices.deleteCourseInDB(req.params.id);
+        sendResponse(res, result as any);
+    }),
 };
