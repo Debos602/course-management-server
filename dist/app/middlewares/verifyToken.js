@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config"));
-const user_constant_1 = require("../modules/user/user.constant");
-const user_model_1 = require("../modules/user/user.model");
+const student_constant_1 = require("../modules/student/student.constant");
+const student_model_1 = require("../modules/student/student.model");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const verifyToken = (0, catchAsync_1.default)((req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
@@ -28,7 +28,7 @@ const verifyToken = (0, catchAsync_1.default)((req, _res, next) => __awaiter(voi
     try {
         const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
         const { _id } = decoded;
-        const user = yield user_model_1.User.findById(_id);
+        const user = yield student_model_1.User.findById(_id);
         // check if user exists
         if (!user) {
             next();
@@ -40,7 +40,7 @@ const verifyToken = (0, catchAsync_1.default)((req, _res, next) => __awaiter(voi
             return;
         }
         // check if the user is blocked
-        if (user.status === user_constant_1.USER_STATUS.BLOCKED) {
+        if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
             next();
             return;
         }

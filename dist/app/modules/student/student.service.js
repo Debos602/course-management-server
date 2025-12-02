@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
-const user_model_1 = require("./user.model");
+const student_model_1 = require("./student.model");
 const getUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id)
+    const user = yield student_model_1.User.findById(id)
         .populate({
         path: 'posts',
         populate: {
@@ -37,7 +37,7 @@ const getUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const getMeFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id)
+    const user = yield student_model_1.User.findById(id)
         .populate({
         path: 'posts',
         populate: {
@@ -54,7 +54,7 @@ const getMeFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const updateProfileIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedUser = yield user_model_1.User.findByIdAndUpdate(id, payload, {
+    const updatedUser = yield student_model_1.User.findByIdAndUpdate(id, payload, {
         new: true,
     });
     return {
@@ -67,7 +67,7 @@ const updateAvatar = (id, avatarURL) => __awaiter(void 0, void 0, void 0, functi
     if (!avatarURL) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Avatar is required');
     }
-    const updatedUser = yield user_model_1.User.findByIdAndUpdate(id, { avatarURL }, {
+    const updatedUser = yield student_model_1.User.findByIdAndUpdate(id, { avatarURL }, {
         new: true,
     });
     if (!updatedUser) {

@@ -16,7 +16,7 @@ exports.User = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongoose_1 = require("mongoose");
 const config_1 = __importDefault(require("../../config"));
-const user_constant_1 = require("./user.constant");
+const student_constant_1 = require("./student.constant");
 const UserSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -26,20 +26,20 @@ const UserSchema = new mongoose_1.Schema({
     role: {
         type: String,
         required: true,
-        enum: user_constant_1.UserRoles,
-        default: user_constant_1.USER_ROLE.USER,
+        enum: student_constant_1.UserRoles,
+        default: student_constant_1.USER_ROLE.USER,
     },
     status: {
         type: String,
         required: true,
-        enum: user_constant_1.UserStatus,
-        default: user_constant_1.USER_STATUS.ACTIVE,
+        enum: student_constant_1.UserStatus,
+        default: student_constant_1.USER_STATUS.ACTIVE,
     },
     userType: {
         type: String,
         required: true,
-        enum: user_constant_1.UserType,
-        default: user_constant_1.USER_TYPE.BASIC,
+        enum: student_constant_1.UserType,
+        default: student_constant_1.USER_TYPE.BASIC,
     },
     isDeleted: { type: Boolean, default: false },
 }, {

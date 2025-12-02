@@ -16,14 +16,14 @@ exports.AdminServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const QueryBuilder_1 = __importDefault(require("../../builders/QueryBuilder"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
-const user_constant_1 = require("../user/user.constant");
-const user_model_1 = require("../user/user.model");
+const student_constant_1 = require("../student/student.constant");
+const student_model_1 = require("../student/student.model");
 const course_model_1 = require("../course/course.model");
 const batch_model_1 = require("../batch/batch.model");
 const enrollment_model_1 = require("../enrollment/enrollment.model");
 const assignment_model_1 = require("../assignment/assignment.model");
 const getUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const userQuery = new QueryBuilder_1.default(user_model_1.User.find(), query)
+    const userQuery = new QueryBuilder_1.default(student_model_1.User.find(), query)
         // .search(UserSearchableFields)
         .filter()
         .sort()
@@ -39,13 +39,13 @@ const getUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function* ()
     };
 });
 const deleteUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield student_model_1.User.findById(id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     // TODO:check other conditions for not deleting
     // delete the user
-    const deletedUser = yield user_model_1.User.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+    const deletedUser = yield student_model_1.User.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     if (!deletedUser) {
         throw new AppError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, 'Failed to delete user!');
     }
@@ -56,7 +56,7 @@ const deleteUserFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () 
     };
 });
 const makeAdminIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield student_model_1.User.findById(id);
     // check if the user exists
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
@@ -66,13 +66,13 @@ const makeAdminIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     // check if the user is blocked
-    if (user.status === user_constant_1.USER_STATUS.BLOCKED) {
+    if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is blocked!');
     }
-    if (user.role === user_constant_1.USER_ROLE.ADMIN) {
+    if (user.role === student_constant_1.USER_ROLE.ADMIN) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is already an admin!');
     }
-    const result = yield user_model_1.User.findByIdAndUpdate(id, { role: user_constant_1.USER_ROLE.ADMIN }, { new: true });
+    const result = yield student_model_1.User.findByIdAndUpdate(id, { role: student_constant_1.USER_ROLE.ADMIN }, { new: true });
     return {
         statusCode: http_status_1.default.OK,
         message: 'User role updated successfully!',
@@ -80,14 +80,14 @@ const makeAdminIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const removeAdminFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield student_model_1.User.findById(id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
-    if (user.role !== user_constant_1.USER_ROLE.ADMIN) {
+    if (user.role !== student_constant_1.USER_ROLE.ADMIN) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is not an admin!');
     }
-    const result = yield user_model_1.User.findByIdAndUpdate(id, { role: user_constant_1.USER_ROLE.USER }, { new: true });
+    const result = yield student_model_1.User.findByIdAndUpdate(id, { role: student_constant_1.USER_ROLE.USER }, { new: true });
     return {
         statusCode: http_status_1.default.OK,
         message: 'User role updated successfully!',
@@ -95,18 +95,18 @@ const removeAdminFromDB = (id) => __awaiter(void 0, void 0, void 0, function* ()
     };
 });
 const blockUserIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield student_model_1.User.findById(id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     if (user.isDeleted) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
-    if (user.status === user_constant_1.USER_STATUS.BLOCKED) {
+    if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is already blocked!');
     }
-    const result = yield user_model_1.User.findByIdAndUpdate(id, {
-        status: user_constant_1.USER_STATUS.BLOCKED,
+    const result = yield student_model_1.User.findByIdAndUpdate(id, {
+        status: student_constant_1.USER_STATUS.BLOCKED,
     }, { new: true });
     return {
         statusCode: http_status_1.default.OK,
@@ -115,18 +115,18 @@ const blockUserIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const unblockUserIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(id);
+    const user = yield student_model_1.User.findById(id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     if (user.isDeleted) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
-    if (user.status === user_constant_1.USER_STATUS.ACTIVE) {
+    if (user.status === student_constant_1.USER_STATUS.ACTIVE) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is already unblocked!');
     }
-    const result = yield user_model_1.User.findByIdAndUpdate(id, {
-        status: user_constant_1.USER_STATUS.ACTIVE,
+    const result = yield student_model_1.User.findByIdAndUpdate(id, {
+        status: student_constant_1.USER_STATUS.ACTIVE,
     }, { new: true });
     return {
         statusCode: http_status_1.default.OK,

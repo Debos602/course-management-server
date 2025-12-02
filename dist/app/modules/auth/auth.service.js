@@ -19,15 +19,15 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const sendMail_1 = require("../../utils/sendMail");
-const user_constant_1 = require("../user/user.constant");
-const user_model_1 = require("../user/user.model");
+const student_constant_1 = require("../student/student.constant");
+const student_model_1 = require("../student/student.model");
 const auth_util_1 = require("./auth.util");
 const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
+    const user = yield student_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
     if (user) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'A user already exists with this email!');
     }
-    const newUser = yield user_model_1.User.create(payload);
+    const newUser = yield student_model_1.User.create(payload);
     const jwtPayload = {
         _id: newUser === null || newUser === void 0 ? void 0 : newUser._id,
         role: newUser === null || newUser === void 0 ? void 0 : newUser.role,
@@ -50,7 +50,7 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email }).select('+password');
+    const user = yield student_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email }).select('+password');
     // check if user exists
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
@@ -60,11 +60,11 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     // check if the user is blocked
-    if (user.status === user_constant_1.USER_STATUS.BLOCKED) {
+    if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is blocked!');
     }
     // check if the password matched
-    const isPasswordMatched = yield user_model_1.User.comparePassword(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password);
+    const isPasswordMatched = yield student_model_1.User.comparePassword(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password);
     if (!isPasswordMatched) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Wrong user id or password');
     }
@@ -100,7 +100,7 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_refresh_secret);
-    const user = yield user_model_1.User.findById(decoded.id);
+    const user = yield student_model_1.User.findById(decoded.id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
@@ -109,7 +109,7 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     // check if the user is blocked
-    if (user.status === user_constant_1.USER_STATUS.BLOCKED) {
+    if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is blocked!');
     }
     const jwtPayload = {
@@ -130,16 +130,16 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const changePassword = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(userId).select('+password');
+    const user = yield student_model_1.User.findById(userId).select('+password');
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
-    const isPasswordMatched = yield user_model_1.User.comparePassword(payload === null || payload === void 0 ? void 0 : payload.currentPassword, user === null || user === void 0 ? void 0 : user.password);
+    const isPasswordMatched = yield student_model_1.User.comparePassword(payload === null || payload === void 0 ? void 0 : payload.currentPassword, user === null || user === void 0 ? void 0 : user.password);
     if (!isPasswordMatched) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Wrong password!');
     }
     const hashedPassword = yield bcrypt_1.default.hash(payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
-    yield user_model_1.User.findByIdAndUpdate(user._id, {
+    yield student_model_1.User.findByIdAndUpdate(user._id, {
         password: hashedPassword,
     }, {
         new: true,
@@ -151,14 +151,14 @@ const changePassword = (userId, payload) => __awaiter(void 0, void 0, void 0, fu
     };
 });
 const forgetPassword = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email });
+    const user = yield student_model_1.User.findOne({ email });
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     if (user === null || user === void 0 ? void 0 : user.isDeleted) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'User not found!');
     }
-    if ((user === null || user === void 0 ? void 0 : user.status) === user_constant_1.USER_STATUS.BLOCKED) {
+    if ((user === null || user === void 0 ? void 0 : user.status) === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'The user is blocked!');
     }
     const jwtPayload = {
@@ -189,18 +189,18 @@ const resetPassword = (payload) => __awaiter(void 0, void 0, void 0, function* (
         throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'Unauthorized!');
     }
     const decodedUser = jsonwebtoken_1.default.verify(token, config_1.default.jwt_reset_secret);
-    const user = yield user_model_1.User.findById(decodedUser.id);
+    const user = yield student_model_1.User.findById(decodedUser.id);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found!');
     }
     if (user === null || user === void 0 ? void 0 : user.isDeleted) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'User not found!');
     }
-    if ((user === null || user === void 0 ? void 0 : user.status) === user_constant_1.USER_STATUS.BLOCKED) {
+    if ((user === null || user === void 0 ? void 0 : user.status) === student_constant_1.USER_STATUS.BLOCKED) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'The user is blocked!');
     }
     const hashedPassword = yield bcrypt_1.default.hash(password, Number(config_1.default.bcrypt_salt_rounds));
-    const updatedUser = yield user_model_1.User.findByIdAndUpdate(decodedUser.id, {
+    const updatedUser = yield student_model_1.User.findByIdAndUpdate(decodedUser.id, {
         password: hashedPassword,
     }, { new: true });
     if (!updatedUser) {

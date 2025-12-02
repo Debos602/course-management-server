@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTACT_FORM_MESSAGE = exports.UserType = exports.USER_TYPE = exports.UserStatus = exports.USER_STATUS = exports.UserRoles = exports.USER_ROLE = void 0;
 exports.USER_ROLE = {
     ADMIN: 'admin',
-    USER: 'user',
+    USER: 'student',
 };
-exports.UserRoles = ['admin', 'user'];
+exports.UserRoles = ['admin', 'student'];
 exports.USER_STATUS = {
     ACTIVE: 'active',
     BLOCKED: 'blocked',

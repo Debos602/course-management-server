@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const admin_route_1 = require("../modules/admin/admin.route");
 const auth_route_1 = require("../modules/auth/auth.route");
-const user_route_1 = require("../modules/user/user.route");
+const user_route_1 = require("../modules/student/user.route");
 const course_route_1 = require("../modules/course/course.route");
 const lesson_route_1 = require("../modules/lesson/lesson.route");
 const assignment_route_1 = require("../modules/assignment/assignment.route");

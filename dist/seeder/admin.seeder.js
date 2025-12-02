@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = __importDefault(require("../app/config"));
-const user_model_1 = require("../app/modules/user/user.model");
+const student_model_1 = require("../app/modules/student/student.model");
 const ADMIN_EMAIL = config_1.default.admin_email || 'debos.das.02@gmail.com';
 const ADMIN_PASSWORD = config_1.default.admin_password || 'password123!';
 const ADMIN_NAME = config_1.default.admin_name || 'Debos Das';
@@ -29,14 +29,14 @@ function run() {
         }
         try {
             yield mongoose_1.default.connect(dbUri);
-            const existing = yield user_model_1.User.findOne({ email: ADMIN_EMAIL }).lean();
+            const existing = yield student_model_1.User.findOne({ email: ADMIN_EMAIL }).lean();
             if (existing) {
                 console.log('Admin already exists');
                 yield mongoose_1.default.disconnect();
                 return;
             }
             // Let the User model pre-save hook hash the password
-            const admin = yield user_model_1.User.create({
+            const admin = yield student_model_1.User.create({
                 name: ADMIN_NAME,
                 email: ADMIN_EMAIL,
                 password: ADMIN_PASSWORD,
