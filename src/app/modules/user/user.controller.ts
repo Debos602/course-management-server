@@ -8,23 +8,7 @@ const getUser = catchAsync(async (req, res) => {
     sendResponse(res, result);
 });
 
-// Route: /api/users/:id/follow (PUT)
-const followUser = catchAsync(async (req, res) => {
-    const result = await UserServices.followUserIntoDB(
-        req.user._id,
-        req.params.id,
-    );
-    sendResponse(res, result);
-});
 
-// Route: /api/users/:id/unfollow (PUT)
-const unfollowUser = catchAsync(async (req, res) => {
-    const result = await UserServices.unfollowUserFromDB(
-        req.user._id,
-        req.params.id,
-    );
-    sendResponse(res, result);
-});
 
 // Route: /api/v1/users/me (GET)
 const getMe = catchAsync(async (req, res) => {
@@ -50,18 +34,11 @@ const updateAvatar = catchAsync(async (req, res) => {
     sendResponse(res, result);
 });
 
-// Route: /api/v1/users/contact-us (POST)
-const contactUs = catchAsync(async (req, res) => {
-    const result = await UserServices.contactUsViaMail(req.body);
-    sendResponse(res, result);
-});
+
 
 export const UserControllers = {
     getUser,
-    followUser,
-    unfollowUser,
     getMe,
     updateProfile,
-    contactUs,
     updateAvatar,
 };
