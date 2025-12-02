@@ -16,6 +16,7 @@ exports.CourseControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const course_service_1 = require("./course.service");
+const admin_service_1 = require("../admin/admin.service");
 const getCourses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_service_1.CourseServices.getCourses(req.query);
     (0, sendResponse_1.default)(res, result);
@@ -75,4 +76,17 @@ exports.CourseControllers = {
     markComplete,
     submitAssignment,
     submitQuiz,
+    // admin actions
+    createCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield admin_service_1.AdminServices.createCourseInDB(req.body);
+        (0, sendResponse_1.default)(res, result);
+    })),
+    updateCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield admin_service_1.AdminServices.updateCourseInDB(req.params.id, req.body);
+        (0, sendResponse_1.default)(res, result);
+    })),
+    deleteCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield admin_service_1.AdminServices.deleteCourseInDB(req.params.id);
+        (0, sendResponse_1.default)(res, result);
+    })),
 };

@@ -20,10 +20,4 @@ router
     .route('/avatar')
     .post((0, auth_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), upload_1.upload.single('avatar'), user_controller_1.UserControllers.updateAvatar);
 router.route('/:id').get(user_controller_1.UserControllers.getUser);
-router
-    .route('/:id/follow')
-    .put((0, auth_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), user_controller_1.UserControllers.followUser);
-router
-    .route('/:id/unfollow')
-    .put((0, auth_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), user_controller_1.UserControllers.unfollowUser);
 exports.UserRoutes = router;

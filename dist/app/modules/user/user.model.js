@@ -41,28 +41,6 @@ const UserSchema = new mongoose_1.Schema({
         enum: user_constant_1.UserType,
         default: user_constant_1.USER_TYPE.BASIC,
     },
-    subscription: {
-        startDate: Date,
-        endDate: Date,
-    },
-    followers: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-    ],
-    following: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'User',
-        },
-    ],
-    posts: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Post',
-        },
-    ],
     isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: true,

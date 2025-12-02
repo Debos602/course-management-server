@@ -85,15 +85,16 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         statusCode: http_status_1.default.OK,
         message: 'User logged in successfully',
         data: {
-            accessToken,
-            refreshToken,
             user: {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
                 avatarURL: user.avatarURL,
+                role: user.role,
             },
+            accessToken,
+            refreshToken
         },
     };
 });

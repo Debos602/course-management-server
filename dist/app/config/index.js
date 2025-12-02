@@ -22,4 +22,8 @@ exports.default = {
     cloudinary_name: process.env.CLOUDINARY_NAME,
     cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
     cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
+    admin_name: process.env.ADMIN_NAME,
+    admin_email: process.env.ADMIN_EMAIL,
+    admin_password: process.env.ADMIN_PASSWORD,
+    admin_phone: process.env.ADMIN_PHONE,
 };

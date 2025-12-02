@@ -21,16 +21,6 @@ const getUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0
     const result = yield user_service_1.UserServices.getUserFromDB(req.params.id);
     (0, sendResponse_1.default)(res, result);
 }));
-// Route: /api/users/:id/follow (PUT)
-const followUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.followUserIntoDB(req.user._id, req.params.id);
-    (0, sendResponse_1.default)(res, result);
-}));
-// Route: /api/users/:id/unfollow (PUT)
-const unfollowUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.unfollowUserFromDB(req.user._id, req.params.id);
-    (0, sendResponse_1.default)(res, result);
-}));
 // Route: /api/v1/users/me (GET)
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.UserServices.getMeFromDB(req.user._id);
@@ -49,8 +39,6 @@ const updateAvatar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 }));
 exports.UserControllers = {
     getUser,
-    followUser,
-    unfollowUser,
     getMe,
     updateProfile,
     updateAvatar,
