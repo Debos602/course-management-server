@@ -5,9 +5,9 @@ import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 import { sendMail } from '../../utils/sendMail';
-import { USER_STATUS } from '../user/user.constant';
-import { ILoginCredentials, IUser } from '../user/user.interface';
-import { User } from '../user/user.model';
+import { USER_STATUS } from '../student/student.constant';
+import { ILoginCredentials, IUser } from '../student/student.interface';
+import { User } from '../student/student.model';
 import { IChangePassword } from './auth.interface';
 import { createToken } from './auth.util';
 

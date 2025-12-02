@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import config from '../app/config';
-import { User } from '../app/modules/user/user.model';
+import { User } from '../app/modules/student/student.model';
 
 const ADMIN_EMAIL = (config.admin_email as string) || 'debos.das.02@gmail.com';
 const ADMIN_PASSWORD = (config.admin_password as string) || 'password123!';

@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
-import { USER_STATUS } from '../modules/user/user.constant';
-import { User } from '../modules/user/user.model';
+import { USER_STATUS } from '../modules/student/student.constant';
+import { User } from '../modules/student/student.model';
 import catchAsync from '../utils/catchAsync';
 
 const verifyToken = catchAsync(async (req, _res, next) => {

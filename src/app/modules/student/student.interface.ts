@@ -1,5 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import { UserRoles, UserStatus, UserType } from './user.constant';
+import { UserRoles, UserStatus, UserType } from './student.constant';
 
 export type IUserRole = (typeof UserRoles)[number];
 export type IUserStatus = (typeof UserStatus)[number];

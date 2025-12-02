@@ -1,8 +1,8 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builders/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { USER_ROLE, USER_STATUS } from '../user/user.constant';
-import { User } from '../user/user.model';
+import { USER_ROLE, USER_STATUS } from '../student/student.constant';
+import { User } from '../student/student.model';
 import { Course } from '../course/course.model';
 import { Batch } from '../batch/batch.model';
 import { Enrollment } from '../enrollment/enrollment.model';

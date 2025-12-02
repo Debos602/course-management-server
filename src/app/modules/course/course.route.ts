@@ -1,7 +1,7 @@
 import express from 'express';
 import verifyToken from '../../middlewares/verifyToken';
 import auth from '../../middlewares/auth';
-import { USER_ROLE } from '../user/user.constant';
+import { USER_ROLE } from '../student/student.constant';
 import { CourseControllers } from './course.controller';
 
 const router = express.Router();

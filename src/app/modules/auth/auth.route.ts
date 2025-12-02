@@ -1,7 +1,7 @@
 import express from 'express';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
-import { USER_ROLE } from '../user/user.constant';
+import { USER_ROLE } from '../student/student.constant';
 import { AuthControllers } from './auth.controller';
 import { AuthValidations } from './auth.validation';
 

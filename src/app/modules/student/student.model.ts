@@ -8,8 +8,8 @@ import {
     UserRoles,
     UserStatus,
     UserType,
-} from './user.constant';
-import { IUser, UserModel } from './user.interface';
+} from './student.constant';
+import { IUser, UserModel } from './student.interface';
 
 const UserSchema = new Schema<IUser, UserModel>(
     {

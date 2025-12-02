@@ -3,9 +3,9 @@ import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import AppError from '../errors/AppError';
-import { USER_STATUS } from '../modules/user/user.constant';
-import { IUserRole } from '../modules/user/user.interface';
-import { User } from '../modules/user/user.model';
+import { USER_STATUS } from '../modules/student/student.constant';
+import { IUserRole } from '../modules/student/student.interface';
+import { User } from '../modules/student/student.model';
 import catchAsync from '../utils/catchAsync';
 
 const auth = (...authorizedRoles: IUserRole[]): RequestHandler => {

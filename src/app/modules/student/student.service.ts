@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 import { sendMail } from '../../utils/sendMail';
-import { CONTACT_FORM_MESSAGE, USER_STATUS } from './user.constant';
-import { IContactUsOptions, IUser } from './user.interface';
-import { User } from './user.model';
+import { CONTACT_FORM_MESSAGE, USER_STATUS } from './student.constant';
+import { IContactUsOptions, IUser } from './student.interface';
+import { User } from './student.model';
 
 const getUserFromDB = async (id: string) => {
     const user = await User.findById(id)
