@@ -1,6 +1,6 @@
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { UserServices } from './user.service';
+import { UserServices } from './student.service';
 
 // Route: /api/v1/users/:id (GET)
 const getUser = catchAsync(async (req, res) => {
