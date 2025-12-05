@@ -3,7 +3,7 @@ import { IAssignment, AssignmentModel } from './assignment.interface';
 
 const AssignmentSchema = new Schema<IAssignment, AssignmentModel>(
     {
-        title: { type: String, required: true },
+        title: { type: String },
         description: { type: String },
         submissionLink: { type: String },
         textAnswer: { type: String },

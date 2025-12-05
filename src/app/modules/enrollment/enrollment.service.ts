@@ -17,4 +17,24 @@ export const EnrollmentServices = {
         const items = await Enrollment.find({ user: userId }).populate({ path: 'course', select: '-__v' });
         return { statusCode: httpStatus.OK, message: 'Enrollments fetched', data: items };
     },
+    updateProgress: async (userId: string, courseId: string, payload: { progress?: number; completedLesson?: string; }) => {
+        const enrollment = await Enrollment.findOne({ user: userId, course: courseId });
+        if (!enrollment) throw new AppError(httpStatus.NOT_FOUND, 'Enrollment not found');
+
+        const { progress, completedLesson } = payload || {};
+        if (typeof progress === 'number') {
+            enrollment.progress = Math.max(0, Math.min(100, progress));
+        }
+
+        if (completedLesson) {
+            const exists = enrollment.completedLessons?.some((id: any) => id.toString() === completedLesson.toString());
+            if (!exists) {
+                enrollment.completedLessons = [...(enrollment.completedLessons || []), completedLesson as any];
+            }
+        }
+
+        await enrollment.save();
+
+        return { statusCode: httpStatus.OK, message: 'Progress updated', data: enrollment };
+    },
 };

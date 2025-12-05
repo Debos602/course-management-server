@@ -154,6 +154,50 @@
       ]
     },
     {
+      "name": "Student",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users","me"] }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Name\",\n  \"phone\": \"0123456789\"\n}" },
+            "url": { "raw": "{{baseUrl}}/users/me", "host": ["{{baseUrl}}"], "path": ["users","me"] }
+          }
+        },
+        {
+          "name": "Update Avatar (form-data file)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "avatar", "type": "file", "src": "" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/users/avatar", "host": ["{{baseUrl}}"], "path": ["users","avatar"] }
+          }
+        },
+        {
+          "name": "Get User By Id",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/users/:userId", "host": ["{{baseUrl}}"], "path": ["users",":userId"] }
+          }
+        }
+      ]
+    },
+    {
       "name": "Assignments",
       "item": [
         {
@@ -208,6 +252,18 @@
           }
         },
         {
+          "name": "Update Progress",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"progress\": 50,\n  \"completedLesson\": \"<lessonId>\"\n}" },
+            "url": { "raw": "{{baseUrl}}/enrollments/:courseId/progress", "host": ["{{baseUrl}}"], "path": ["enrollments", ":courseId", "progress"] }
+          }
+        },
+        {
           "name": "My Enrollments (enrollment module)",
           "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ], "url": { "raw": "{{baseUrl}}/enrollments/mine", "host": ["{{baseUrl}}"], "path": ["enrollments", "mine"] } }
         }
@@ -232,6 +288,46 @@
         {
           "name": "Admin - Get Assignments for Course",
           "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ], "url": { "raw": "{{baseUrl}}/admin/courses/:courseId/assignments", "host": ["{{baseUrl}}"], "path": ["admin", "courses", ":courseId", "assignments"] } }
+        }
+      ]
+    }
+    ,
+    {
+      "name": "Lessons",
+      "item": [
+        {
+          "name": "Admin - Create Lesson (video upload)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "video", "type": "file", "src": "" },
+                { "key": "body", "type": "text", "value": "{\"title\": \"Lesson 1\", \"order\": 1, \"duration\": 600}" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/lessons/course/:courseId", "host": ["{{baseUrl}}"], "path": ["lessons","course",":courseId"] }
+          }
+        }
+        ,
+        {
+          "name": "Get Lessons By Course",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/lessons/course/:courseId", "host": ["{{baseUrl}}"], "path": ["lessons","course",":courseId"] },
+            "description": "Retrieve all lessons for a course (public access with optional token). Returns lessons ordered by `order`."
+          }
+        },
+        {
+          "name": "Get Lesson Details",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{accessToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/lessons/:lessonId", "host": ["{{baseUrl}}"], "path": ["lessons",":lessonId"] },
+            "description": "Retrieve a single lesson by id. Useful for playing the lesson video and viewing resources."
+          }
         }
       ]
     }

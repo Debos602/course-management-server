@@ -3,12 +3,13 @@ import verifyToken from '../../middlewares/verifyToken';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../student/student.constant';
 import { CourseControllers } from './course.controller';
+import { LessonControllers } from '../lesson/lesson.controller';
 import { upload } from '../../middlewares/upload';
 
 const router = express.Router();
 
 // Public listing with optional token to identify user
-router.route('/').get(verifyToken, CourseControllers.getCourses).post(auth(USER_ROLE.ADMIN), upload.any(), CourseControllers.createCourse);
+router.route('/').get(CourseControllers.getCourses).post(auth(USER_ROLE.ADMIN), upload.any(), CourseControllers.createCourse);
 
 // Create course (admin) with thumbnail upload
 router.post(
@@ -19,7 +20,14 @@ router.post(
 );
 
 // Course details
-router.route('/:id').get(verifyToken, CourseControllers.getCourse).put(auth(USER_ROLE.ADMIN), CourseControllers.updateCourse).delete(auth(USER_ROLE.ADMIN), CourseControllers.deleteCourse);
+router.route('/:id').get(verifyToken, CourseControllers.getCourse).put(auth(USER_ROLE.ADMIN, USER_ROLE.USER), CourseControllers.updateCourse).delete(auth(USER_ROLE.ADMIN), CourseControllers.deleteCourse);
+
+// Alias: get all lessons for a course via /courses/:id/lessons
+router.get('/:id/lessons', verifyToken, (req, res, next) => {
+    // forward param name expected by LessonControllers.getByCourse
+    req.params.courseId = req.params.id;
+    return LessonControllers.getByCourse(req as any, res as any, next);
+});
 
 // Student protected endpoints
 router.route('/enrolled').get(auth(), CourseControllers.getEnrolled);

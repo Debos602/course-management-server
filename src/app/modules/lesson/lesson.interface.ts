@@ -2,6 +2,7 @@ import mongoose, { Model } from 'mongoose';
 
 export interface ILesson {
     _id: mongoose.Types.ObjectId;
+    userId: mongoose.Types.ObjectId;
     title: string;
     videoURL: string;
     duration?: number;

@@ -3,48 +3,43 @@ import config from '../config';
 import { USER_STATUS } from '../modules/student/student.constant';
 import { User } from '../modules/student/student.model';
 import catchAsync from '../utils/catchAsync';
+import AppError from '../errors/AppError';
 
 const verifyToken = catchAsync(async (req, _res, next) => {
     const token = req.headers?.authorization?.split?.(' ')?.[1];
 
     if (!token) {
-        next();
-        return;
+        return next(new AppError(401, 'No token provided'));
     }
 
-    // decode the token
+    let decoded;
     try {
-        const decoded = jwt.verify(
+        decoded = jwt.verify(
             token,
             config.jwt_access_secret as string,
         ) as JwtPayload;
-
-        const { _id } = decoded;
-
-        const user = await User.findById(_id);
-
-        // check if user exists
-        if (!user) {
-            next();
-            return;
-        }
-
-        // check if the user is deleted
-        if (user.isDeleted) {
-            next();
-            return;
-        }
-
-        // check if the user is blocked
-        if (user.status === USER_STATUS.BLOCKED) {
-            next();
-            return;
-        }
-        req.user = user;
-        next();
-    } catch {
-        next();
+    } catch (error) {
+        return next(new AppError(401, 'Invalid or expired token'));
     }
+
+    const { _id } = decoded;
+    const user = await User.findById(_id);
+
+    if (!user) {
+        return next(new AppError(401, 'User not found'));
+    }
+
+    if (user.isDeleted) {
+        return next(new AppError(403, 'User is deleted'));
+    }
+
+    if (user.status === USER_STATUS.BLOCKED) {
+        return next(new AppError(403, 'User is blocked'));
+    }
+
+    req.user = user;
+    next();
 });
+
 
 export default verifyToken;

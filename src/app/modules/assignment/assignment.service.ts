@@ -10,6 +10,7 @@ export const AssignmentServices = {
         course: string;
         lesson?: string;
         student: string;
+        description?: string;
     }) => {
         const assignment = await Assignment.create({
             title: payload.title,
@@ -19,6 +20,7 @@ export const AssignmentServices = {
             lesson: payload.lesson,
             student: payload.student,
             submittedAt: new Date(),
+            description: payload.description
         });
 
         return {

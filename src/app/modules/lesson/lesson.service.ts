@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import { Lesson } from './lesson.model';
+import { Course } from '../course/course.model';
 import AppError from '../../errors/AppError';
 
 export const LessonServices = {
@@ -19,6 +20,24 @@ export const LessonServices = {
             statusCode: httpStatus.OK,
             message: 'Lessons fetched',
             data: lessons,
+        };
+    },
+    createLessonForCourse: async (courseId: string, payload: Record<string, any>) => {
+        // ensure course exists
+        const course = await Course.findById(courseId);
+        if (!course) throw new AppError(httpStatus.NOT_FOUND, 'Course not found');
+
+        // set the course on payload
+        const lesson = await Lesson.create({ ...payload, course: courseId });
+
+        // add to course syllabus if not already present
+        course.syllabus = [...(course.syllabus || []), lesson._id as any];
+        await course.save();
+
+        return {
+            statusCode: httpStatus.CREATED,
+            message: 'Lesson created',
+            data: lesson,
         };
     },
 };

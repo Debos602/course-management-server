@@ -56,14 +56,20 @@ const auth = (...authorizedRoles: IUserRole[]): RequestHandler => {
             throw new AppError(httpStatus.BAD_REQUEST, 'User is blocked!');
         }
 
-        // check if the user is authorized
-        if (authorizedRoles && !authorizedRoles.includes(user.role)) {
+        // normalize legacy role values (some records may still have 'user')
+        const rawRole = (user as any).role;
+        const normalizedRole = (rawRole === 'user' ? 'student' : rawRole) as IUserRole;
+
+        // check if the user is authorized (only enforce when roles were passed)
+        if (authorizedRoles && authorizedRoles.length > 0 && !authorizedRoles.includes(normalizedRole)) {
             throw new AppError(
                 httpStatus.UNAUTHORIZED,
                 'You are not authorized!',
             );
         }
 
+        // attach normalized role on the user object so downstream code sees consistent values
+        (user as any).role = normalizedRole;
         req.user = user;
         next();
     });

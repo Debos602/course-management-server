@@ -15,4 +15,17 @@ const myEnrollments = catchAsync(async (req, res) => {
     sendResponse(res, result as any);
 });
 
-export const EnrollmentControllers = { enroll, myEnrollments };
+const updateProgress = catchAsync(async (req, res) => {
+    const userId = req.user?._id?.toString();
+    const courseId = req.params.id as string;
+    const { progress, completedLesson } = req.body || {};
+
+    const result = await EnrollmentServices.updateProgress(userId as string, courseId, {
+        progress,
+        completedLesson,
+    });
+
+    sendResponse(res, result as any);
+});
+
+export const EnrollmentControllers = { enroll, myEnrollments, updateProgress };

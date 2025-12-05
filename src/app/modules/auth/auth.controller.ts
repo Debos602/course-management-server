@@ -12,12 +12,14 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
     const result = await AuthServices.login(req.body);
     sendResponse(res, result);
+    console.log("Login controller executed", res, result);
 });
 
 // Route: /api/v1/auth/refresh-token (POST)
 const refreshToken = catchAsync(async (req, res) => {
     const { refreshToken } = req.cookies;
     const result = await AuthServices.refreshToken(refreshToken);
+
     sendResponse(res, result);
 });
 

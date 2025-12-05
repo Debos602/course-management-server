@@ -2,7 +2,7 @@ import mongoose, { Model } from 'mongoose';
 
 export interface IAssignment {
     _id: mongoose.Types.ObjectId;
-    title: string;
+    title?: string;
     description?: string;
     submissionLink?: string;
     textAnswer?: string;

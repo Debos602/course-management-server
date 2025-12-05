@@ -57,6 +57,7 @@ const register = async (payload: IUser) => {
 };
 
 const login = async (payload: ILoginCredentials) => {
+    console.log("Payload in service:", payload);
     const user = await User.findOne({ email: payload?.email }).select(
         '+password',
     );
