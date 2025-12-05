@@ -9,13 +9,19 @@ import router from './app/routes';
 
 const app = express();
 
+// Ensure client URL exists
+const clientUrl = config.client_base_url || "http://localhost:5173";
+
 const corsOptions = {
-    origin: [config.client_base_url as string],
+    origin: [clientUrl],
     credentials: true,
 };
 
-// parsers
+// CORS must be FIRST
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+// parsers
 app.use(express.json());
 app.use(cookieParser());
 

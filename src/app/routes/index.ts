@@ -1,7 +1,7 @@
 import express from 'express';
 import { AdminRoutes } from '../modules/admin/admin.route';
 import { AuthRoutes } from '../modules/auth/auth.route';
-import { UserRoutes } from '../modules/student/user.route';
+import { UserRoutes } from '../modules/student/student.route';
 import { CourseRoutes } from '../modules/course/course.route';
 import { LessonRoutes } from '../modules/lesson/lesson.route';
 import { AssignmentRoutes } from '../modules/assignment/assignment.route';

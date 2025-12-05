@@ -2,6 +2,7 @@ import express from 'express';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../student/student.constant';
 import { AdminControllers } from './admin.controller';
+import { upload } from '../../middlewares/upload';
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router
 
 // Courses (admin)
 router.route('/courses').get(auth(USER_ROLE.ADMIN), AdminControllers.getCourses);
-router.route('/courses').post(auth(USER_ROLE.ADMIN), AdminControllers.createCourse);
+router.route('/courses').post(auth(USER_ROLE.ADMIN), upload.single('thumbnailURL'), AdminControllers.createCourse);
 router.route('/courses/:id').get(auth(USER_ROLE.ADMIN), AdminControllers.getCourse);
 router.route('/courses/:id').put(auth(USER_ROLE.ADMIN), AdminControllers.updateCourse);
 router.route('/courses/:id').delete(auth(USER_ROLE.ADMIN), AdminControllers.deleteCourse);

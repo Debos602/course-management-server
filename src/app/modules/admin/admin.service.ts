@@ -182,6 +182,7 @@ const unblockUserIntoDB = async (id: string) => {
 
 // Course Management
 const createCourseInDB = async (payload: Record<string, any>) => {
+    console.log('Creating course with payload:', payload);
     const course = await Course.create(payload);
     return { statusCode: httpStatus.CREATED, message: 'Course created', data: course };
 };

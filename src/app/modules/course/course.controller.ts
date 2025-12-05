@@ -66,7 +66,62 @@ export const CourseControllers = {
     submitQuiz,
     // admin actions
     createCourse: catchAsync(async (req, res) => {
-        const result = await AdminServices.createCourseInDB(req.body);
+        console.log('Creating course with data:', req.body, 'file:', req.file, 'files:', (req as any).files);
+        // Start with form fields. Some clients (mobile apps) send a single field 'body' containing
+        // a JSON string with the actual payload. Handle that case by parsing it.
+        let payload: any = { ...(req.body || {}) };
+        if (typeof payload.body === 'string') {
+            try {
+                const parsed = JSON.parse(payload.body);
+                // merge parsed JSON into payload (parsed fields take precedence)
+                payload = { ...payload, ...parsed };
+            } catch (e) {
+                // invalid JSON — leave as-is and the validation will surface the issue
+            }
+        }
+
+        // Determine uploaded file (support req.file, req.files array, or req.files object from fields)
+        let file: any = undefined;
+        if (req.file) file = req.file;
+        else if ((req as any).files) {
+            const files = (req as any).files;
+            if (Array.isArray(files) && files.length > 0) file = files[0];
+            else if (typeof files === 'object') {
+                // fields format: { thumbnail: [file], other: [file] }
+                const keys = Object.keys(files);
+                if (keys.length > 0 && Array.isArray(files[keys[0]]) && files[keys[0]].length > 0) {
+                    file = files[keys[0]][0];
+                }
+            }
+        }
+
+        // Attach thumbnail URL from multer/cloudinary upload (varies by storage)
+        if (file) {
+            payload.thumbnailURL = file.path || file.secure_url || file.url || '';
+        }
+
+        // Normalise common JSON-string fields sent inside multipart forms
+        // (tags, syllabus may be sent as JSON strings)
+        if (typeof payload.tags === 'string') {
+            try {
+                payload.tags = JSON.parse(payload.tags);
+            } catch (e) {
+                // if not JSON, attempt to split by comma
+                payload.tags = payload.tags.split(',').map((t: string) => t.trim()).filter(Boolean);
+            }
+        }
+        if (typeof payload.syllabus === 'string') {
+            try {
+                payload.syllabus = JSON.parse(payload.syllabus);
+            } catch (e) {
+                payload.syllabus = payload.syllabus.split(',').map((s: string) => s.trim()).filter(Boolean);
+            }
+        }
+
+        // If the client included a nested 'body' key, remove it after parsing
+        if (Object.prototype.hasOwnProperty.call(payload, 'body')) delete payload.body;
+
+        const result = await AdminServices.createCourseInDB(payload);
         sendResponse(res, result as any);
     }),
     updateCourse: catchAsync(async (req, res) => {
