@@ -25,6 +25,7 @@ exports.AssignmentServices = {
             lesson: payload.lesson,
             student: payload.student,
             submittedAt: new Date(),
+            description: payload.description
         });
         return {
             statusCode: http_status_1.default.CREATED,

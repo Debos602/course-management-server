@@ -20,6 +20,10 @@ const submit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     var _a, _b;
     const student = (_b = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString();
     const payload = Object.assign(Object.assign({}, (req.body || {})), { student });
+    // If no title provided by the client, generate a harmless default to satisfy schema validation.
+    if (!payload.title || String(payload.title).trim() === '') {
+        payload.title = `Submission by ${student} - ${new Date().toISOString()}`;
+    }
     const result = yield assignment_service_1.AssignmentServices.submitAssignment(payload);
     (0, sendResponse_1.default)(res, result);
 }));

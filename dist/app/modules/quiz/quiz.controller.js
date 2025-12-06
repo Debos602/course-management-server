@@ -16,8 +16,12 @@ exports.QuizControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const quiz_service_1 = require("./quiz.service");
+const createQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield quiz_service_1.QuizServices.createQuiz(req.body);
+    (0, sendResponse_1.default)(res, result);
+}));
 const getQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield quiz_service_1.QuizServices.getQuizById(req.params.id);
+    const result = yield quiz_service_1.QuizServices.getQuizById(req.params.courseId);
     (0, sendResponse_1.default)(res, result);
 }));
 const submit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,4 +31,4 @@ const submit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     const result = yield quiz_service_1.QuizServices.submitQuiz(userId, req.params.id, answers);
     (0, sendResponse_1.default)(res, result);
 }));
-exports.QuizControllers = { getQuiz, submit };
+exports.QuizControllers = { createQuiz, getQuiz, submit };

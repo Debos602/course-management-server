@@ -32,4 +32,22 @@ exports.EnrollmentServices = {
         const items = yield enrollment_model_1.Enrollment.find({ user: userId }).populate({ path: 'course', select: '-__v' });
         return { statusCode: http_status_1.default.OK, message: 'Enrollments fetched', data: items };
     }),
+    updateProgress: (userId, courseId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        const enrollment = yield enrollment_model_1.Enrollment.findOne({ user: userId, course: courseId });
+        if (!enrollment)
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Enrollment not found');
+        const { progress, completedLesson } = payload || {};
+        if (typeof progress === 'number') {
+            enrollment.progress = Math.max(0, Math.min(100, progress));
+        }
+        if (completedLesson) {
+            const exists = (_a = enrollment.completedLessons) === null || _a === void 0 ? void 0 : _a.some((id) => id.toString() === completedLesson.toString());
+            if (!exists) {
+                enrollment.completedLessons = [...(enrollment.completedLessons || []), completedLesson];
+            }
+        }
+        yield enrollment.save();
+        return { statusCode: http_status_1.default.OK, message: 'Progress updated', data: enrollment };
+    }),
 };

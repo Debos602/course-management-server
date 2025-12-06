@@ -15,26 +15,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const user_service_1 = require("./user.service");
+const student_service_1 = require("./student.service");
 // Route: /api/v1/users/:id (GET)
 const getUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.getUserFromDB(req.params.id);
+    const result = yield student_service_1.UserServices.getUserFromDB(req.params.id);
     (0, sendResponse_1.default)(res, result);
 }));
 // Route: /api/v1/users/me (GET)
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.getMeFromDB(req.user._id);
+    const result = yield student_service_1.UserServices.getMeFromDB(req.user._id);
     (0, sendResponse_1.default)(res, result);
 }));
 // Route: /api/users/me (PUT)
 const updateProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.updateProfileIntoDB(req.user._id, req.body);
+    const result = yield student_service_1.UserServices.updateProfileIntoDB(req.user._id, req.body);
     (0, sendResponse_1.default)(res, result);
 }));
 // Route: /api/v1/users/avatar (POST)
 const updateAvatar = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const result = yield user_service_1.UserServices.updateAvatar(req.user._id, (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path);
+    const result = yield student_service_1.UserServices.updateAvatar(req.user._id, (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path);
     (0, sendResponse_1.default)(res, result);
 }));
 exports.UserControllers = {

@@ -12,12 +12,16 @@ const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalEr
 const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
+// Ensure client URL exists
+const clientUrl = config_1.default.client_base_url || "http://localhost:5173";
 const corsOptions = {
-    origin: [config_1.default.client_base_url],
+    origin: [clientUrl],
     credentials: true,
 };
-// parsers
+// CORS must be FIRST
 app.use((0, cors_1.default)(corsOptions));
+app.options("*", (0, cors_1.default)(corsOptions));
+// parsers
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 // routes

@@ -29,4 +29,15 @@ const myEnrollments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     const result = yield enrollment_service_1.EnrollmentServices.getEnrolledForUser(userId);
     (0, sendResponse_1.default)(res, result);
 }));
-exports.EnrollmentControllers = { enroll, myEnrollments };
+const updateProgress = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    const userId = (_f = (_e = req.user) === null || _e === void 0 ? void 0 : _e._id) === null || _f === void 0 ? void 0 : _f.toString();
+    const courseId = req.params.id;
+    const { progress, completedLesson } = req.body || {};
+    const result = yield enrollment_service_1.EnrollmentServices.updateProgress(userId, courseId, {
+        progress,
+        completedLesson,
+    });
+    (0, sendResponse_1.default)(res, result);
+}));
+exports.EnrollmentControllers = { enroll, myEnrollments, updateProgress };

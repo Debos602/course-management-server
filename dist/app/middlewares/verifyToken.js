@@ -17,38 +17,32 @@ const config_1 = __importDefault(require("../config"));
 const student_constant_1 = require("../modules/student/student.constant");
 const student_model_1 = require("../modules/student/student.model");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const AppError_1 = __importDefault(require("../errors/AppError"));
 const verifyToken = (0, catchAsync_1.default)((req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     const token = (_d = (_c = (_b = (_a = req.headers) === null || _a === void 0 ? void 0 : _a.authorization) === null || _b === void 0 ? void 0 : _b.split) === null || _c === void 0 ? void 0 : _c.call(_b, ' ')) === null || _d === void 0 ? void 0 : _d[1];
     if (!token) {
-        next();
-        return;
+        return next(new AppError_1.default(401, 'No token provided'));
     }
-    // decode the token
+    let decoded;
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
-        const { _id } = decoded;
-        const user = yield student_model_1.User.findById(_id);
-        // check if user exists
-        if (!user) {
-            next();
-            return;
-        }
-        // check if the user is deleted
-        if (user.isDeleted) {
-            next();
-            return;
-        }
-        // check if the user is blocked
-        if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
-            next();
-            return;
-        }
-        req.user = user;
-        next();
+        decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
     }
-    catch (_e) {
-        next();
+    catch (error) {
+        return next(new AppError_1.default(401, 'Invalid or expired token'));
     }
+    const { _id } = decoded;
+    const user = yield student_model_1.User.findById(_id);
+    if (!user) {
+        return next(new AppError_1.default(401, 'User not found'));
+    }
+    if (user.isDeleted) {
+        return next(new AppError_1.default(403, 'User is deleted'));
+    }
+    if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
+        return next(new AppError_1.default(403, 'User is blocked'));
+    }
+    req.user = user;
+    next();
 }));
 exports.default = verifyToken;

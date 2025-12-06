@@ -7,9 +7,13 @@ exports.LessonRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const lesson_controller_1 = require("./lesson.controller");
 const verifyToken_1 = __importDefault(require("../../middlewares/verifyToken"));
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const student_constant_1 = require("../student/student.constant");
+const upload_1 = require("../../middlewares/upload");
 const router = express_1.default.Router();
 // Public: get lessons for a course
-router.route('/course/:courseId').get(verifyToken_1.default, lesson_controller_1.LessonControllers.getByCourse);
+// Accept video upload when creating a lesson (field name: 'video')
+router.route('/course/:courseId').get((0, auth_1.default)(student_constant_1.USER_ROLE.USER, student_constant_1.USER_ROLE.ADMIN), verifyToken_1.default, lesson_controller_1.LessonControllers.getByCourse).post((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.uploadVideo.single('videoURL'), lesson_controller_1.LessonControllers.createLesson);
 // Get single lesson (requires enrollment in course normally; access control handled elsewhere)
 router.route('/:id').get(verifyToken_1.default, lesson_controller_1.LessonControllers.getLesson);
 exports.LessonRoutes = router;

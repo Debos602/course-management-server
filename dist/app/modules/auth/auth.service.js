@@ -50,6 +50,7 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Payload in service:", payload);
     const user = yield student_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email }).select('+password');
     // check if user exists
     if (!user) {

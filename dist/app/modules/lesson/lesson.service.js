@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LessonServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const lesson_model_1 = require("./lesson.model");
+const course_model_1 = require("../course/course.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 exports.LessonServices = {
     getLessonById: (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,6 +34,22 @@ exports.LessonServices = {
             statusCode: http_status_1.default.OK,
             message: 'Lessons fetched',
             data: lessons,
+        };
+    }),
+    createLessonForCourse: (courseId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+        // ensure course exists
+        const course = yield course_model_1.Course.findById(courseId);
+        if (!course)
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Course not found');
+        // set the course on payload
+        const lesson = yield lesson_model_1.Lesson.create(Object.assign(Object.assign({}, payload), { course: courseId }));
+        // add to course syllabus if not already present
+        course.syllabus = [...(course.syllabus || []), lesson._id];
+        yield course.save();
+        return {
+            statusCode: http_status_1.default.CREATED,
+            message: 'Lesson created',
+            data: lesson,
         };
     }),
 };

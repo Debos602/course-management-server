@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const admin_route_1 = require("../modules/admin/admin.route");
 const auth_route_1 = require("../modules/auth/auth.route");
-const user_route_1 = require("../modules/student/user.route");
+const student_route_1 = require("../modules/student/student.route");
 const course_route_1 = require("../modules/course/course.route");
 const lesson_route_1 = require("../modules/lesson/lesson.route");
 const assignment_route_1 = require("../modules/assignment/assignment.route");
@@ -15,7 +15,7 @@ const enrollment_route_1 = require("../modules/enrollment/enrollment.route");
 const router = express_1.default.Router();
 const routes = [
     { path: '/auth', route: auth_route_1.AuthRoutes },
-    { path: '/users', route: user_route_1.UserRoutes },
+    { path: '/users', route: student_route_1.UserRoutes },
     { path: '/courses', route: course_route_1.CourseRoutes },
     { path: '/lessons', route: lesson_route_1.LessonRoutes },
     { path: '/assignments', route: assignment_route_1.AssignmentRoutes },

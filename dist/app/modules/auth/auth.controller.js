@@ -25,6 +25,7 @@ const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.login(req.body);
     (0, sendResponse_1.default)(res, result);
+    console.log("Login controller executed", res, result);
 }));
 // Route: /api/v1/auth/refresh-token (POST)
 const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

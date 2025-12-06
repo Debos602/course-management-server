@@ -48,10 +48,15 @@ const auth = (...authorizedRoles) => {
         if (user.status === student_constant_1.USER_STATUS.BLOCKED) {
             throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User is blocked!');
         }
-        // check if the user is authorized
-        if (authorizedRoles && !authorizedRoles.includes(user.role)) {
+        // normalize legacy role values (some records may still have 'user')
+        const rawRole = user.role;
+        const normalizedRole = (rawRole === 'user' ? 'student' : rawRole);
+        // check if the user is authorized (only enforce when roles were passed)
+        if (authorizedRoles && authorizedRoles.length > 0 && !authorizedRoles.includes(normalizedRole)) {
             throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized!');
         }
+        // attach normalized role on the user object so downstream code sees consistent values
+        user.role = normalizedRole;
         req.user = user;
         next();
     }));

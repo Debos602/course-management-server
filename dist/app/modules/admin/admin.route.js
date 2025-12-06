@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const auth_1 = __importDefault(require("../../middlewares/auth"));
 const student_constant_1 = require("../student/student.constant");
 const admin_controller_1 = require("./admin.controller");
+const upload_1 = require("../../middlewares/upload");
 const router = express_1.default.Router();
 router.route('/users/').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getUsers);
 router
@@ -27,7 +28,7 @@ router
     .put((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.unblockUser);
 // Courses (admin)
 router.route('/courses').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getCourses);
-router.route('/courses').post((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.createCourse);
+router.route('/courses').post((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.upload.single('thumbnailURL'), admin_controller_1.AdminControllers.createCourse);
 router.route('/courses/:id').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getCourse);
 router.route('/courses/:id').put((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.updateCourse);
 router.route('/courses/:id').delete((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.deleteCourse);
