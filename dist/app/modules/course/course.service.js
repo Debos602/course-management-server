@@ -201,5 +201,5 @@ exports.CourseServices = {
             message: 'Quiz submitted',
             data: { attemptId: attempt._id, score, total: questions.reduce((s, q) => s + (q.marks || 1), 0) },
         };
-    }),
+    })
 };

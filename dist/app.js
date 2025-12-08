@@ -12,16 +12,12 @@ const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalEr
 const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
-// Ensure client URL exists
-const clientUrl = config_1.default.client_base_url || "http://localhost:5173";
 const corsOptions = {
-    origin: [clientUrl],
+    origin: [config_1.default.client_base_url],
     credentials: true,
 };
-// CORS must be FIRST
-app.use((0, cors_1.default)(corsOptions));
-app.options("*", (0, cors_1.default)(corsOptions));
 // parsers
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 // routes
@@ -31,7 +27,7 @@ app.get('/', (_req, res) => {
     res.status(http_status_1.default.OK).json({
         success: true,
         statusCode: 200,
-        message: 'Course management server is running successfully!',
+        message: 'Tech tips server is running successfully!',
     });
 });
 // globalError handler

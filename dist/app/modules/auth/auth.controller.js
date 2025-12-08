@@ -24,6 +24,7 @@ const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 // Route: /api/v1/auth/login (POST)
 const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.login(req.body);
+    console.log(result);
     (0, sendResponse_1.default)(res, result);
     console.log("Login controller executed", res, result);
 }));

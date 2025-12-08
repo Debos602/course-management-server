@@ -16,7 +16,6 @@ exports.CourseControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const course_service_1 = require("./course.service");
-const admin_service_1 = require("../admin/admin.service");
 const getCourses = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield course_service_1.CourseServices.getCourses(req.query);
     (0, sendResponse_1.default)(res, result);
@@ -75,74 +74,5 @@ exports.CourseControllers = {
     getLesson,
     markComplete,
     submitAssignment,
-    submitQuiz,
-    // admin actions
-    createCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log('Creating course with data:', req.body, 'file:', req.file, 'files:', req.files);
-        // Start with form fields. Some clients (mobile apps) send a single field 'body' containing
-        // a JSON string with the actual payload. Handle that case by parsing it.
-        let payload = Object.assign({}, (req.body || {}));
-        if (typeof payload.body === 'string') {
-            try {
-                const parsed = JSON.parse(payload.body);
-                // merge parsed JSON into payload (parsed fields take precedence)
-                payload = Object.assign(Object.assign({}, payload), parsed);
-            }
-            catch (e) {
-                // invalid JSON — leave as-is and the validation will surface the issue
-            }
-        }
-        // Determine uploaded file (support req.file, req.files array, or req.files object from fields)
-        let file = undefined;
-        if (req.file)
-            file = req.file;
-        else if (req.files) {
-            const files = req.files;
-            if (Array.isArray(files) && files.length > 0)
-                file = files[0];
-            else if (typeof files === 'object') {
-                // fields format: { thumbnail: [file], other: [file] }
-                const keys = Object.keys(files);
-                if (keys.length > 0 && Array.isArray(files[keys[0]]) && files[keys[0]].length > 0) {
-                    file = files[keys[0]][0];
-                }
-            }
-        }
-        // Attach thumbnail URL from multer/cloudinary upload (varies by storage)
-        if (file) {
-            payload.thumbnailURL = file.path || file.secure_url || file.url || '';
-        }
-        // Normalise common JSON-string fields sent inside multipart forms
-        // (tags, syllabus may be sent as JSON strings)
-        if (typeof payload.tags === 'string') {
-            try {
-                payload.tags = JSON.parse(payload.tags);
-            }
-            catch (e) {
-                // if not JSON, attempt to split by comma
-                payload.tags = payload.tags.split(',').map((t) => t.trim()).filter(Boolean);
-            }
-        }
-        if (typeof payload.syllabus === 'string') {
-            try {
-                payload.syllabus = JSON.parse(payload.syllabus);
-            }
-            catch (e) {
-                payload.syllabus = payload.syllabus.split(',').map((s) => s.trim()).filter(Boolean);
-            }
-        }
-        // If the client included a nested 'body' key, remove it after parsing
-        if (Object.prototype.hasOwnProperty.call(payload, 'body'))
-            delete payload.body;
-        const result = yield admin_service_1.AdminServices.createCourseInDB(payload);
-        (0, sendResponse_1.default)(res, result);
-    })),
-    updateCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield admin_service_1.AdminServices.updateCourseInDB(req.params.id, req.body);
-        (0, sendResponse_1.default)(res, result);
-    })),
-    deleteCourse: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield admin_service_1.AdminServices.deleteCourseInDB(req.params.id);
-        (0, sendResponse_1.default)(res, result);
-    })),
+    submitQuiz
 };

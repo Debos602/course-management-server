@@ -136,7 +136,7 @@ const unblockUserIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* ()
 });
 // Course Management
 const createCourseInDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Creating course with payload:', payload);
+    console.log('Creating course with payload service:', payload);
     const course = yield course_model_1.Course.create(payload);
     return { statusCode: http_status_1.default.CREATED, message: 'Course created', data: course };
 });

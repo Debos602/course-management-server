@@ -48,7 +48,16 @@ const unblockUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 }));
 // Courses
 const createCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield admin_service_1.AdminServices.createCourseInDB(req.body);
+    let payload = req.body.payload;
+    // form-data হলে payload string আসে → JSON.parse প্রয়োজন
+    if (typeof payload === 'string') {
+        payload = JSON.parse(payload);
+    }
+    // image থাকলে সেটা যোগ করুন
+    if (req.file) {
+        payload.thumbnailURL = req.file.path;
+    }
+    const result = yield admin_service_1.AdminServices.createCourseInDB(payload);
     (0, sendResponse_1.default)(res, result);
 }));
 const updateCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
