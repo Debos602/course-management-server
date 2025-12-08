@@ -1,19 +1,17 @@
-import mongoose, { Model } from 'mongoose';
+// course.interface.ts
+import { Model, Types } from 'mongoose';
 
 export interface ICourse {
-    _id: mongoose.Types.ObjectId;
     title: string;
-    description?: string;
+    description: string;
     instructorName: string;
     price: number;
-    category?: string;
+    category: string;
     tags: string[];
-    syllabus: mongoose.Types.ObjectId[];
-    rating: number;
+    rating?: number;
     isPublished: boolean;
     thumbnailURL?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    syllabus?: Types.ObjectId[];
 }
 
-export interface CourseModel extends Model<ICourse> { }
+export type CourseModel = Model<ICourse>;

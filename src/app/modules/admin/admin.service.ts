@@ -7,6 +7,7 @@ import { Course } from '../course/course.model';
 import { Batch } from '../batch/batch.model';
 import { Enrollment } from '../enrollment/enrollment.model';
 import { Assignment } from '../assignment/assignment.model';
+import { ICourse } from '../course/course.interface';
 
 
 const getUsersFromDB = async (query: Record<string, unknown>) => {
@@ -181,8 +182,8 @@ const unblockUserIntoDB = async (id: string) => {
 };
 
 // Course Management
-const createCourseInDB = async (payload: Record<string, any>) => {
-    console.log('Creating course with payload:', payload);
+const createCourseInDB = async (payload: ICourse) => {
+    console.log('Creating course with payload service:', payload);
     const course = await Course.create(payload);
     return { statusCode: httpStatus.CREATED, message: 'Course created', data: course };
 };

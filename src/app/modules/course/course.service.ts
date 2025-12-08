@@ -215,5 +215,5 @@ export const CourseServices = {
             message: 'Quiz submitted',
             data: { attemptId: attempt._id, score, total: questions.reduce((s: number, q: any) => s + (q.marks || 1), 0) },
         };
-    },
+    }
 };

@@ -9,19 +9,13 @@ import router from './app/routes';
 
 const app = express();
 
-// Ensure client URL exists
-const clientUrl = config.client_base_url || "http://localhost:5173";
-
 const corsOptions = {
-    origin: [clientUrl],
+    origin: [config.client_base_url as string],
     credentials: true,
 };
 
-// CORS must be FIRST
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
-
 // parsers
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -33,7 +27,7 @@ app.get('/', (_req: Request, res: Response) => {
     res.status(httpStatus.OK).json({
         success: true,
         statusCode: 200,
-        message: 'Course management server is running successfully!',
+        message: 'Tech tips server is running successfully!',
     });
 });
 

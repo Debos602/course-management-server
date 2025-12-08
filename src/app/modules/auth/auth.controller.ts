@@ -11,6 +11,7 @@ const register = catchAsync(async (req, res) => {
 // Route: /api/v1/auth/login (POST)
 const login = catchAsync(async (req, res) => {
     const result = await AuthServices.login(req.body);
+    console.log(result);
     sendResponse(res, result);
     console.log("Login controller executed", res, result);
 });

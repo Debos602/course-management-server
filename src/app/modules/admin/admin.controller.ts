@@ -42,9 +42,22 @@ const unblockUser = catchAsync(async (req, res) => {
 
 // Courses
 const createCourse = catchAsync(async (req, res) => {
-    const result = await AdminServices.createCourseInDB(req.body);
+    let payload = req.body.payload;
+
+    // form-data হলে payload string আসে → JSON.parse প্রয়োজন
+    if (typeof payload === 'string') {
+        payload = JSON.parse(payload);
+    }
+
+    // image থাকলে সেটা যোগ করুন
+    if (req.file) {
+        payload.thumbnailURL = req.file.path;
+    }
+
+    const result = await AdminServices.createCourseInDB(payload);
     sendResponse(res, result);
 });
+
 
 const updateCourse = catchAsync(async (req, res) => {
     const result = await AdminServices.updateCourseInDB(req.params.id, req.body);
