@@ -1,11 +1,37 @@
 import httpStatus from 'http-status';
 import { Enrollment } from './enrollment.model';
 import AppError from '../../errors/AppError';
+import { Batch } from '../batch/batch.model';
+import mongoose from 'mongoose';
 
 export const EnrollmentServices = {
     enroll: async (userId: string, courseId: string) => {
         try {
-            const enrollment = await Enrollment.create({ user: userId, course: courseId });
+            // Find an available batch for the course
+            const batch = await Batch.aggregate([
+                { $match: { course: new mongoose.Types.ObjectId(courseId) } },
+                { $lookup: { from: 'enrollments', localField: '_id', foreignField: 'batch', as: 'enrollments' } },
+                { $addFields: { availableSeats: { $subtract: ['$capacity', { $size: '$enrollments' }] } } },
+                { $match: { availableSeats: { $gt: 0 } } },
+                { $sort: { startDate: 1 } }, // Earliest starting batch first
+                { $limit: 1 }
+            ]);
+
+            if (!batch || batch.length === 0) {
+                throw new AppError(httpStatus.NOT_FOUND, 'No available batch for this course');
+            }
+
+            const selectedBatch = batch[0];
+
+            const enrollment = await Enrollment.create({
+                user: userId,
+                course: courseId,
+                batch: selectedBatch._id
+            });
+
+            // Update the batch to include the enrollment reference
+            await Batch.findByIdAndUpdate(selectedBatch._id, { $push: { enrollments: enrollment._id } });
+
             return { statusCode: httpStatus.CREATED, message: 'Enrolled', data: enrollment };
         } catch (err: any) {
             if (err.code === 11000) throw new AppError(httpStatus.BAD_REQUEST, 'Already enrolled');

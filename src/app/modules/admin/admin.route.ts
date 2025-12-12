@@ -37,13 +37,16 @@ router.route('/courses/:id').delete(auth(USER_ROLE.ADMIN), AdminControllers.dele
 
 // Batches
 router.route('/batches').post(auth(USER_ROLE.ADMIN), AdminControllers.createBatch);
+router.route('/all-batches').get(auth(USER_ROLE.ADMIN), AdminControllers.getAllBatches);
 router.route('/batches/:id').put(auth(USER_ROLE.ADMIN), AdminControllers.updateBatch);
 router.route('/batches/:id').delete(auth(USER_ROLE.ADMIN), AdminControllers.deleteBatch);
 router.route('/courses/:courseId/batches').get(auth(USER_ROLE.ADMIN), AdminControllers.getBatchesForCourse);
+router.route('/batches/:batchId').get(auth(USER_ROLE.ADMIN), AdminControllers.getBatchById);
 
 // Enrollments
 router.route('/courses/:courseId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForCourse);
 router.route('/batches/:batchId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForBatch);
+router.route('/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getAllEnrollments);
 
 // Assignment review
 router.route('/courses/:courseId/assignments').get(auth(USER_ROLE.ADMIN), AdminControllers.getAssignmentsForCourse);

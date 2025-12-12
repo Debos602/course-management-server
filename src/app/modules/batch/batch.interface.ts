@@ -4,10 +4,9 @@ export interface IBatch {
     _id: mongoose.Types.ObjectId;
     name: string;
     course: mongoose.Types.ObjectId;
-    startDate?: Date;
-    endDate?: Date;
-    instructor?: mongoose.Types.ObjectId;
-    students?: mongoose.Types.ObjectId[];
+    startDate: Date;
+    endDate: Date;
+    enrollments: mongoose.Types.ObjectId[];
     capacity?: number;
     createdAt?: Date;
     updatedAt?: Date;

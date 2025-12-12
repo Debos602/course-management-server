@@ -3,7 +3,7 @@ import sendResponse from '../../utils/sendResponse';
 import { EnrollmentServices } from './enrollment.service';
 
 const enroll = catchAsync(async (req, res) => {
-    const userId = req.user?._id?.toString();
+    const { userId } = req.body;
     const courseId = req.params.id as string;
     const result = await EnrollmentServices.enroll(userId as string, courseId);
     sendResponse(res, result as any);

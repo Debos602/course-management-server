@@ -85,6 +85,11 @@ const createBatch = catchAsync(async (req, res) => {
     sendResponse(res, result);
 });
 
+const getAllBatches = catchAsync(async (req, res) => {
+    const result = await AdminServices.getAllBatches();
+    sendResponse(res, result);
+});
+
 const updateBatch = catchAsync(async (req, res) => {
     const result = await AdminServices.updateBatchInDB(req.params.id, req.body);
     sendResponse(res, result);
@@ -99,6 +104,10 @@ const getBatchesForCourse = catchAsync(async (req, res) => {
     const result = await AdminServices.getBatchesForCourse(req.params.courseId);
     sendResponse(res, result);
 });
+const getBatchById = catchAsync(async (req, res) => {
+    const result = await AdminServices.getBatchById(req.params.batchId);
+    sendResponse(res, result);
+});
 
 // Enrollments
 const getEnrollmentsForCourse = catchAsync(async (req, res) => {
@@ -108,6 +117,10 @@ const getEnrollmentsForCourse = catchAsync(async (req, res) => {
 
 const getEnrollmentsForBatch = catchAsync(async (req, res) => {
     const result = await AdminServices.getEnrollmentsByBatch(req.params.batchId);
+    sendResponse(res, result);
+});
+const getAllEnrollments = catchAsync(async (req, res) => {
+    const result = await AdminServices.getAllEnrollments();
     sendResponse(res, result);
 });
 
@@ -139,9 +152,12 @@ export const AdminControllers = {
     updateBatch,
     deleteBatch,
     getBatchesForCourse,
+    getAllBatches,
+    getBatchById,
     // enrollments
     getEnrollmentsForCourse,
     getEnrollmentsForBatch,
+    getAllEnrollments,
     // assignments
     getAssignmentsForCourse,
 
