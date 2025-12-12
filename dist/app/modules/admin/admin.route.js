@@ -34,12 +34,15 @@ router.route('/courses/:id').put((0, auth_1.default)(student_constant_1.USER_ROL
 router.route('/courses/:id').delete((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.deleteCourse);
 // Batches
 router.route('/batches').post((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.createBatch);
+router.route('/all-batches').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getAllBatches);
 router.route('/batches/:id').put((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.updateBatch);
 router.route('/batches/:id').delete((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.deleteBatch);
 router.route('/courses/:courseId/batches').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getBatchesForCourse);
+router.route('/batches/:batchId').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getBatchById);
 // Enrollments
 router.route('/courses/:courseId/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getEnrollmentsForCourse);
 router.route('/batches/:batchId/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getEnrollmentsForBatch);
+router.route('/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getAllEnrollments);
 // Assignment review
 router.route('/courses/:courseId/assignments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getAssignmentsForCourse);
 exports.AdminRoutes = router;

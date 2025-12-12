@@ -17,21 +17,20 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const enrollment_service_1 = require("./enrollment.service");
 const enroll = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    const userId = (_b = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString();
+    const { userId } = req.body;
     const courseId = req.params.id;
     const result = yield enrollment_service_1.EnrollmentServices.enroll(userId, courseId);
     (0, sendResponse_1.default)(res, result);
 }));
 const myEnrollments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
-    const userId = (_d = (_c = req.user) === null || _c === void 0 ? void 0 : _c._id) === null || _d === void 0 ? void 0 : _d.toString();
+    var _a, _b;
+    const userId = (_b = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString();
     const result = yield enrollment_service_1.EnrollmentServices.getEnrolledForUser(userId);
     (0, sendResponse_1.default)(res, result);
 }));
 const updateProgress = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
-    const userId = (_f = (_e = req.user) === null || _e === void 0 ? void 0 : _e._id) === null || _f === void 0 ? void 0 : _f.toString();
+    var _c, _d;
+    const userId = (_d = (_c = req.user) === null || _c === void 0 ? void 0 : _c._id) === null || _d === void 0 ? void 0 : _d.toString();
     const courseId = req.params.id;
     const { progress, completedLesson } = req.body || {};
     const result = yield enrollment_service_1.EnrollmentServices.updateProgress(userId, courseId, {

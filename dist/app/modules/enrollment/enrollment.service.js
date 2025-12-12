@@ -16,10 +16,31 @@ exports.EnrollmentServices = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const enrollment_model_1 = require("./enrollment.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const batch_model_1 = require("../batch/batch.model");
+const mongoose_1 = __importDefault(require("mongoose"));
 exports.EnrollmentServices = {
     enroll: (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const enrollment = yield enrollment_model_1.Enrollment.create({ user: userId, course: courseId });
+            // Find an available batch for the course
+            const batch = yield batch_model_1.Batch.aggregate([
+                { $match: { course: new mongoose_1.default.Types.ObjectId(courseId) } },
+                { $lookup: { from: 'enrollments', localField: '_id', foreignField: 'batch', as: 'enrollments' } },
+                { $addFields: { availableSeats: { $subtract: ['$capacity', { $size: '$enrollments' }] } } },
+                { $match: { availableSeats: { $gt: 0 } } },
+                { $sort: { startDate: 1 } }, // Earliest starting batch first
+                { $limit: 1 }
+            ]);
+            if (!batch || batch.length === 0) {
+                throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'No available batch for this course');
+            }
+            const selectedBatch = batch[0];
+            const enrollment = yield enrollment_model_1.Enrollment.create({
+                user: userId,
+                course: courseId,
+                batch: selectedBatch._id
+            });
+            // Update the batch to include the enrollment reference
+            yield batch_model_1.Batch.findByIdAndUpdate(selectedBatch._id, { $push: { enrollments: enrollment._id } });
             return { statusCode: http_status_1.default.CREATED, message: 'Enrolled', data: enrollment };
         }
         catch (err) {

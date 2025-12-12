@@ -81,6 +81,10 @@ const createBatch = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     const result = yield admin_service_1.AdminServices.createBatchInDB(req.body);
     (0, sendResponse_1.default)(res, result);
 }));
+const getAllBatches = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.getAllBatches();
+    (0, sendResponse_1.default)(res, result);
+}));
 const updateBatch = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield admin_service_1.AdminServices.updateBatchInDB(req.params.id, req.body);
     (0, sendResponse_1.default)(res, result);
@@ -93,6 +97,10 @@ const getBatchesForCourse = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     const result = yield admin_service_1.AdminServices.getBatchesForCourse(req.params.courseId);
     (0, sendResponse_1.default)(res, result);
 }));
+const getBatchById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.getBatchById(req.params.batchId);
+    (0, sendResponse_1.default)(res, result);
+}));
 // Enrollments
 const getEnrollmentsForCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield admin_service_1.AdminServices.getEnrollmentsByCourse(req.params.courseId);
@@ -100,6 +108,10 @@ const getEnrollmentsForCourse = (0, catchAsync_1.default)((req, res) => __awaite
 }));
 const getEnrollmentsForBatch = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield admin_service_1.AdminServices.getEnrollmentsByBatch(req.params.batchId);
+    (0, sendResponse_1.default)(res, result);
+}));
+const getAllEnrollments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.getAllEnrollments();
     (0, sendResponse_1.default)(res, result);
 }));
 // Assignment review
@@ -125,9 +137,12 @@ exports.AdminControllers = {
     updateBatch,
     deleteBatch,
     getBatchesForCourse,
+    getAllBatches,
+    getBatchById,
     // enrollments
     getEnrollmentsForCourse,
     getEnrollmentsForBatch,
+    getAllEnrollments,
     // assignments
     getAssignmentsForCourse,
 };
