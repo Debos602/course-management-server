@@ -9,9 +9,17 @@ const router = express.Router();
 
 // Public: get lessons for a course
 // Accept video upload when creating a lesson (field name: 'video')
-router.route('/course/:courseId').get(auth(USER_ROLE.USER, USER_ROLE.ADMIN), verifyToken, LessonControllers.getByCourse).post(auth(USER_ROLE.ADMIN), uploadVideo.single('videoURL'), LessonControllers.createLesson);
+router
+    .route('/course/:courseId')
+    .get(verifyToken, auth(USER_ROLE.USER, USER_ROLE.ADMIN), LessonControllers.getByCourse)
+    .post(verifyToken, auth(USER_ROLE.ADMIN), uploadVideo.single('videoURL'), LessonControllers.createLesson);
 
 // Get single lesson (requires enrollment in course normally; access control handled elsewhere)
-router.route('/:id').get(verifyToken, LessonControllers.getLesson);
+router
+    .route('/:id')
+    .get(verifyToken, LessonControllers.getLesson)
+    .put(verifyToken, auth(USER_ROLE.ADMIN), uploadVideo.single('videoURL'), LessonControllers.updateLesson)
+    .delete(verifyToken, auth(USER_ROLE.ADMIN), LessonControllers.deleteLesson);
 
 export const LessonRoutes = router;
+

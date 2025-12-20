@@ -42,8 +42,36 @@ const createLesson = catchAsync(async (req, res) => {
     sendResponse(res, result as any);
 });
 
+const updateLesson = catchAsync(async (req, res) => {
+    const lessonId = req.params.id as string;
+
+    // Support clients sending a JSON string in `body` (common for multipart requests)
+    let payload: any = { ...(req.body || {}) };
+    if (typeof payload.body === 'string') {
+        try {
+            const parsed = JSON.parse(payload.body);
+            payload = { ...payload, ...parsed };
+        } catch (e) {
+            // ignore parse errors
+        }
+    }
+
+    const file = req.file as any | undefined;
+
+    const result = await LessonServices.updateLesson(lessonId, payload, file);
+    sendResponse(res, result as any);
+});
+
+const deleteLesson = catchAsync(async (req, res) => {
+    const lessonId = req.params.id as string;
+    const result = await LessonServices.deleteLesson(lessonId);
+    sendResponse(res, result as any);
+});
+
 export const LessonControllers = {
     getLesson,
     getByCourse,
     createLesson,
+    updateLesson,
+    deleteLesson,
 };

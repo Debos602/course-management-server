@@ -36,6 +36,17 @@ export const QuizServices = {
         };
     },
 
+    // GET ALL QUIZZES
+    getAllQuizzes: async () => {
+        const quizzes = await Quiz.find();
+        return {
+            statusCode: httpStatus.OK,
+            message: 'Quizzes fetched',
+            data: quizzes,
+        };
+    }
+    ,
+
     // GET QUIZ
     getQuizById: async (courseId: string) => {
         const quiz = await Quiz.findOne({ course: courseId });
@@ -86,6 +97,40 @@ export const QuizServices = {
                 score,
                 total: totalMarks,
             },
+        };
+    },
+    updateQuiz: async (id: string, payload: any) => {
+        const quiz = await Quiz.findById(id);
+        if (!quiz) throw new AppError(404, 'Quiz not found');
+
+        if (payload.questions && Array.isArray(payload.questions)) {
+            const totalMarks = payload.questions.reduce(
+                (sum: number, q: any) => sum + (q.marks || 1),
+                0,
+            );
+            payload.totalMarks = totalMarks;
+        }
+
+        Object.assign(quiz, payload);
+        await quiz.save();
+
+        return {
+            statusCode: httpStatus.OK,
+            message: 'Quiz updated',
+            data: quiz,
+        };
+    },
+
+    deleteQuiz: async (id: string) => {
+        const quiz = await Quiz.findById(id);
+        if (!quiz) throw new AppError(404, 'Quiz not found');
+
+        await Quiz.findByIdAndDelete(id);
+
+        return {
+            statusCode: httpStatus.OK,
+            message: 'Quiz deleted',
+            data: { id },
         };
     },
 };

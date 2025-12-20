@@ -237,6 +237,23 @@
             "body": { "mode": "raw", "raw": "{ \"answers\": [0,1,2] }" },
             "url": { "raw": "{{baseUrl}}/quizzes/:quizId/submit", "host": ["{{baseUrl}}"], "path": ["quizzes", ":quizId", "submit"] }
           }
+        },
+        {
+          "name": "Update Quiz (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{ \"title\": \"Updated Title\", \"questions\": [] }" },
+            "url": { "raw": "{{baseUrl}}/quizzes/:id", "host": ["{{baseUrl}}"], "path": ["quizzes", ":id"] }
+          }
+        },
+        {
+          "name": "Delete Quiz (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/quizzes/:id", "host": ["{{baseUrl}}"], "path": ["quizzes", ":id"] }
+          }
         }
       ]
     },
@@ -290,8 +307,62 @@
           "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ], "url": { "raw": "{{baseUrl}}/admin/courses/:courseId/assignments", "host": ["{{baseUrl}}"], "path": ["admin", "courses", ":courseId", "assignments"] } }
         }
       ]
-    }
-    ,
+    },
+    {
+      "name": "Batches",
+      "item": [
+        {
+          "name": "Create Batch (admin)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{ \"name\": \"Batch 1\", \"course\": \":courseId\", \"startDate\": \"2025-01-01\" }" },
+            "url": { "raw": "{{baseUrl}}/admin/batches", "host": ["{{baseUrl}}"], "path": ["admin","batches"] }
+          }
+        },
+        {
+          "name": "Get All Batches (admin)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/admin/all-batches", "host": ["{{baseUrl}}"], "path": ["admin","all-batches"] }
+          }
+        },
+        {
+          "name": "Update Batch (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" }, { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{ \"name\": \"Updated Batch\" }" },
+            "url": { "raw": "{{baseUrl}}/admin/batches/:id", "host": ["{{baseUrl}}"], "path": ["admin","batches",":id"] }
+          }
+        },
+        {
+          "name": "Delete Batch (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/admin/batches/:id", "host": ["{{baseUrl}}"], "path": ["admin","batches",":id"] }
+          }
+        },
+        {
+          "name": "Get Batches For Course (admin)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/admin/courses/:courseId/batches", "host": ["{{baseUrl}}"], "path": ["admin","courses",":courseId","batches"] }
+          }
+        },
+        {
+          "name": "Get Batch By Id (admin)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/admin/batches/:batchId", "host": ["{{baseUrl}}"], "path": ["admin","batches",":batchId"] }
+          }
+        }
+      ]
+    },
     {
       "name": "Lessons",
       "item": [
@@ -303,14 +374,13 @@
             "body": {
               "mode": "formdata",
               "formdata": [
-                { "key": "video", "type": "file", "src": "" },
+                { "key": "videoURL", "type": "file", "src": "" },
                 { "key": "body", "type": "text", "value": "{\"title\": \"Lesson 1\", \"order\": 1, \"duration\": 600}" }
               ]
             },
             "url": { "raw": "{{baseUrl}}/lessons/course/:courseId", "host": ["{{baseUrl}}"], "path": ["lessons","course",":courseId"] }
           }
-        }
-        ,
+        },
         {
           "name": "Get Lessons By Course",
           "request": {
@@ -328,13 +398,36 @@
             "url": { "raw": "{{baseUrl}}/lessons/:lessonId", "host": ["{{baseUrl}}"], "path": ["lessons",":lessonId"] },
             "description": "Retrieve a single lesson by id. Useful for playing the lesson video and viewing resources."
           }
+        },
+        {
+          "name": "Update Lesson (admin, form-data)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "videoURL", "type": "file", "src": "" },
+                { "key": "body", "type": "text", "value": "{\"title\": \"Updated Lesson\", \"order\": 2 }" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/lessons/:id", "host": ["{{baseUrl}}"], "path": ["lessons",":id"] }
+          }
+        },
+        {
+          "name": "Delete Lesson (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [ { "key": "Authorization", "value": "Bearer {{adminToken}}" } ],
+            "url": { "raw": "{{baseUrl}}/lessons/:id", "host": ["{{baseUrl}}"], "path": ["lessons",":id"] }
+          }
         }
       ]
     }
   ],
   "event": [],
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "baseUrl", "value": "http://localhost:5000/api/v1" },
     { "key": "accessToken", "value": "" },
     { "key": "adminToken", "value": "" }
   ]

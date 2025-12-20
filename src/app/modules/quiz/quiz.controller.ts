@@ -7,6 +7,11 @@ const createQuiz = catchAsync(async (req, res) => {
     sendResponse(res, result as any);
 });
 
+const getAllQuizzes = catchAsync(async (req, res) => {
+    const result = await QuizServices.getAllQuizzes();
+    sendResponse(res, result as any);
+});
+
 const getQuiz = catchAsync(async (req, res) => {
     const result = await QuizServices.getQuizById(req.params.courseId);
     sendResponse(res, result as any);
@@ -25,4 +30,14 @@ const submit = catchAsync(async (req, res) => {
     sendResponse(res, result as any);
 });
 
-export const QuizControllers = { createQuiz, getQuiz, submit };
+const updateQuiz = catchAsync(async (req, res) => {
+    const result = await QuizServices.updateQuiz(req.params.id, req.body);
+    sendResponse(res, result as any);
+});
+
+const deleteQuiz = catchAsync(async (req, res) => {
+    const result = await QuizServices.deleteQuiz(req.params.id);
+    sendResponse(res, result as any);
+});
+
+export const QuizControllers = { createQuiz, getAllQuizzes, getQuiz, submit, updateQuiz, deleteQuiz };
