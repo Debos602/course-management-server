@@ -38,6 +38,15 @@ exports.QuizServices = {
             data: quiz,
         };
     }),
+    // GET ALL QUIZZES
+    getAllQuizzes: () => __awaiter(void 0, void 0, void 0, function* () {
+        const quizzes = yield quiz_model_1.Quiz.find();
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Quizzes fetched',
+            data: quizzes,
+        };
+    }),
     // GET QUIZ
     getQuizById: (courseId) => __awaiter(void 0, void 0, void 0, function* () {
         const quiz = yield quiz_model_1.Quiz.findOne({ course: courseId });
@@ -77,6 +86,33 @@ exports.QuizServices = {
                 score,
                 total: totalMarks,
             },
+        };
+    }),
+    updateQuiz: (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+        const quiz = yield quiz_model_1.Quiz.findById(id);
+        if (!quiz)
+            throw new AppError_1.default(404, 'Quiz not found');
+        if (payload.questions && Array.isArray(payload.questions)) {
+            const totalMarks = payload.questions.reduce((sum, q) => sum + (q.marks || 1), 0);
+            payload.totalMarks = totalMarks;
+        }
+        Object.assign(quiz, payload);
+        yield quiz.save();
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Quiz updated',
+            data: quiz,
+        };
+    }),
+    deleteQuiz: (id) => __awaiter(void 0, void 0, void 0, function* () {
+        const quiz = yield quiz_model_1.Quiz.findById(id);
+        if (!quiz)
+            throw new AppError_1.default(404, 'Quiz not found');
+        yield quiz_model_1.Quiz.findByIdAndDelete(id);
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Quiz deleted',
+            data: { id },
         };
     }),
 };

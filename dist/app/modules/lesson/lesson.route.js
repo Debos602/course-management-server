@@ -13,7 +13,14 @@ const upload_1 = require("../../middlewares/upload");
 const router = express_1.default.Router();
 // Public: get lessons for a course
 // Accept video upload when creating a lesson (field name: 'video')
-router.route('/course/:courseId').get((0, auth_1.default)(student_constant_1.USER_ROLE.USER, student_constant_1.USER_ROLE.ADMIN), verifyToken_1.default, lesson_controller_1.LessonControllers.getByCourse).post((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.uploadVideo.single('videoURL'), lesson_controller_1.LessonControllers.createLesson);
+router
+    .route('/course/:courseId')
+    .get(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.USER, student_constant_1.USER_ROLE.ADMIN), lesson_controller_1.LessonControllers.getByCourse)
+    .post(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.uploadVideo.single('videoURL'), lesson_controller_1.LessonControllers.createLesson);
 // Get single lesson (requires enrollment in course normally; access control handled elsewhere)
-router.route('/:id').get(verifyToken_1.default, lesson_controller_1.LessonControllers.getLesson);
+router
+    .route('/:id')
+    .get(verifyToken_1.default, lesson_controller_1.LessonControllers.getLesson)
+    .put(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.uploadVideo.single('videoURL'), lesson_controller_1.LessonControllers.updateLesson)
+    .delete(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), lesson_controller_1.LessonControllers.deleteLesson);
 exports.LessonRoutes = router;

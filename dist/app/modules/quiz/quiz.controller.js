@@ -20,6 +20,10 @@ const createQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     const result = yield quiz_service_1.QuizServices.createQuiz(req.body);
     (0, sendResponse_1.default)(res, result);
 }));
+const getAllQuizzes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield quiz_service_1.QuizServices.getAllQuizzes();
+    (0, sendResponse_1.default)(res, result);
+}));
 const getQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield quiz_service_1.QuizServices.getQuizById(req.params.courseId);
     (0, sendResponse_1.default)(res, result);
@@ -31,4 +35,12 @@ const submit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     const result = yield quiz_service_1.QuizServices.submitQuiz(userId, req.params.id, answers);
     (0, sendResponse_1.default)(res, result);
 }));
-exports.QuizControllers = { createQuiz, getQuiz, submit };
+const updateQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield quiz_service_1.QuizServices.updateQuiz(req.params.id, req.body);
+    (0, sendResponse_1.default)(res, result);
+}));
+const deleteQuiz = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield quiz_service_1.QuizServices.deleteQuiz(req.params.id);
+    (0, sendResponse_1.default)(res, result);
+}));
+exports.QuizControllers = { createQuiz, getAllQuizzes, getQuiz, submit, updateQuiz, deleteQuiz };

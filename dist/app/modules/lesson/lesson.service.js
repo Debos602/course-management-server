@@ -52,4 +52,49 @@ exports.LessonServices = {
             data: lesson,
         };
     }),
+    updateLesson: (id, payload, file) => __awaiter(void 0, void 0, void 0, function* () {
+        const lesson = yield lesson_model_1.Lesson.findById(id);
+        if (!lesson)
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Lesson not found');
+        // attach uploaded video url if present
+        if (file) {
+            payload.videoURL = file.path || file.secure_url || file.url || payload.videoURL || '';
+        }
+        // if course is changing, update syllabus arrays
+        if (payload.course && payload.course.toString() !== lesson.course.toString()) {
+            const oldCourse = yield course_model_1.Course.findById(lesson.course);
+            const newCourse = yield course_model_1.Course.findById(payload.course);
+            if (!newCourse)
+                throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'New course not found');
+            if (oldCourse) {
+                oldCourse.syllabus = (oldCourse.syllabus || []).filter((l) => l.toString() !== lesson._id.toString());
+                yield oldCourse.save();
+            }
+            newCourse.syllabus = [...(newCourse.syllabus || []), lesson._id];
+            yield newCourse.save();
+        }
+        Object.assign(lesson, payload);
+        yield lesson.save();
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Lesson updated',
+            data: lesson,
+        };
+    }),
+    deleteLesson: (id) => __awaiter(void 0, void 0, void 0, function* () {
+        const lesson = yield lesson_model_1.Lesson.findById(id);
+        if (!lesson)
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Lesson not found');
+        const course = yield course_model_1.Course.findById(lesson.course);
+        if (course) {
+            course.syllabus = (course.syllabus || []).filter((l) => l.toString() !== lesson._id.toString());
+            yield course.save();
+        }
+        yield lesson_model_1.Lesson.findByIdAndDelete(id);
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Lesson deleted',
+            data: { id },
+        };
+    }),
 };

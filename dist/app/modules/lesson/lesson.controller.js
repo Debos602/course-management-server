@@ -46,8 +46,32 @@ const createLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     const result = yield lesson_service_1.LessonServices.createLessonForCourse(courseId, payload);
     (0, sendResponse_1.default)(res, result);
 }));
+const updateLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const lessonId = req.params.id;
+    // Support clients sending a JSON string in `body` (common for multipart requests)
+    let payload = Object.assign({}, (req.body || {}));
+    if (typeof payload.body === 'string') {
+        try {
+            const parsed = JSON.parse(payload.body);
+            payload = Object.assign(Object.assign({}, payload), parsed);
+        }
+        catch (e) {
+            // ignore parse errors
+        }
+    }
+    const file = req.file;
+    const result = yield lesson_service_1.LessonServices.updateLesson(lessonId, payload, file);
+    (0, sendResponse_1.default)(res, result);
+}));
+const deleteLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const lessonId = req.params.id;
+    const result = yield lesson_service_1.LessonServices.deleteLesson(lessonId);
+    (0, sendResponse_1.default)(res, result);
+}));
 exports.LessonControllers = {
     getLesson,
     getByCourse,
     createLesson,
+    updateLesson,
+    deleteLesson,
 };
