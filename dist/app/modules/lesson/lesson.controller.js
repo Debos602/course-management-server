@@ -24,6 +24,10 @@ const getByCourse = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     const result = yield lesson_service_1.LessonServices.getLessonsByCourse(req.params.courseId);
     (0, sendResponse_1.default)(res, result);
 }));
+const getAllLessons = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lesson_service_1.LessonServices.getAllLessons(req.query);
+    (0, sendResponse_1.default)(res, result);
+}));
 const createLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const courseId = req.params.courseId;
     // Support clients sending a JSON string in `body` (common for multipart requests)
@@ -69,6 +73,7 @@ const deleteLesson = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     (0, sendResponse_1.default)(res, result);
 }));
 exports.LessonControllers = {
+    getAllLessons,
     getLesson,
     getByCourse,
     createLesson,

@@ -17,7 +17,22 @@ const http_status_1 = __importDefault(require("http-status"));
 const lesson_model_1 = require("./lesson.model");
 const course_model_1 = require("../course/course.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const QueryBuilder_1 = __importDefault(require("../../builders/QueryBuilder"));
 exports.LessonServices = {
+    getAllLessons: (query) => __awaiter(void 0, void 0, void 0, function* () {
+        const lessonQuery = new QueryBuilder_1.default(lesson_model_1.Lesson.find(), query)
+            .sort()
+            .paginate()
+            .fields();
+        const lessons = yield lessonQuery.modelQuery.exec();
+        const meta = yield lessonQuery.countTotal();
+        return {
+            statusCode: http_status_1.default.OK,
+            message: 'Lessons fetched',
+            meta,
+            data: lessons,
+        };
+    }),
     getLessonById: (id) => __awaiter(void 0, void 0, void 0, function* () {
         const lesson = yield lesson_model_1.Lesson.findById(id).select('-__v');
         if (!lesson)

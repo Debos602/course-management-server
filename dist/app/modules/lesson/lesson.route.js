@@ -17,6 +17,10 @@ router
     .route('/course/:courseId')
     .get(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.USER, student_constant_1.USER_ROLE.ADMIN), lesson_controller_1.LessonControllers.getByCourse)
     .post(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), upload_1.uploadVideo.single('videoURL'), lesson_controller_1.LessonControllers.createLesson);
+// get all lessons
+router
+    .route('/')
+    .get(verifyToken_1.default, (0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), lesson_controller_1.LessonControllers.getAllLessons);
 // Get single lesson (requires enrollment in course normally; access control handled elsewhere)
 router
     .route('/:id')
