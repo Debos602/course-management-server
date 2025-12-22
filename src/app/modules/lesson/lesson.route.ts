@@ -14,6 +14,11 @@ router
     .get(verifyToken, auth(USER_ROLE.USER, USER_ROLE.ADMIN), LessonControllers.getByCourse)
     .post(verifyToken, auth(USER_ROLE.ADMIN), uploadVideo.single('videoURL'), LessonControllers.createLesson);
 
+// get all lessons
+router
+    .route('/')
+    .get(verifyToken, auth(USER_ROLE.ADMIN), LessonControllers.getAllLessons);
+
 // Get single lesson (requires enrollment in course normally; access control handled elsewhere)
 router
     .route('/:id')

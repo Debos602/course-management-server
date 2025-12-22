@@ -2,8 +2,27 @@ import httpStatus from 'http-status';
 import { Lesson } from './lesson.model';
 import { Course } from '../course/course.model';
 import AppError from '../../errors/AppError';
+import QueryBuilder from '../../builders/QueryBuilder';
 
 export const LessonServices = {
+
+    getAllLessons: async (query: Record<string, unknown>) => {
+        const lessonQuery = new QueryBuilder(Lesson.find(), query)
+            .sort()
+            .paginate()
+            .fields();
+
+        const lessons = await lessonQuery.modelQuery.exec();
+        const meta = await lessonQuery.countTotal();
+
+        return {
+            statusCode: httpStatus.OK,
+            message: 'Lessons fetched',
+            meta,
+            data: lessons,
+        };
+    },
+
     getLessonById: async (id: string) => {
         const lesson = await Lesson.findById(id).select('-__v');
         if (!lesson) throw new AppError(httpStatus.NOT_FOUND, 'Lesson not found');

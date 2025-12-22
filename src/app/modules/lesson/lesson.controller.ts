@@ -16,6 +16,10 @@ const getByCourse = catchAsync(async (req, res) => {
     sendResponse(res, result);
 });
 
+const getAllLessons = catchAsync(async (req, res) => {
+    const result = await LessonServices.getAllLessons(req.query);
+    sendResponse(res, result);
+});
 
 const createLesson = catchAsync(async (req, res) => {
     const courseId = req.params.courseId as string;
@@ -69,6 +73,7 @@ const deleteLesson = catchAsync(async (req, res) => {
 });
 
 export const LessonControllers = {
+    getAllLessons,
     getLesson,
     getByCourse,
     createLesson,
