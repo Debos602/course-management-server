@@ -46,7 +46,7 @@ router.route('/batches/:batchId').get(auth(USER_ROLE.ADMIN), AdminControllers.ge
 // Enrollments
 router.route('/courses/:courseId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForCourse);
 router.route('/batches/:batchId/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getEnrollmentsForBatch);
-router.route('/enrollments').get(auth(USER_ROLE.ADMIN), AdminControllers.getAllEnrollments);
+router.route('/enrolled').get(auth(USER_ROLE.ADMIN, USER_ROLE.USER), AdminControllers.getAllEnrollments);
 
 // Assignment review
 router.route('/courses/:courseId/assignments').get(auth(USER_ROLE.ADMIN), AdminControllers.getAssignmentsForCourse);

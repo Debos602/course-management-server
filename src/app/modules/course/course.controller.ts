@@ -1,8 +1,6 @@
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { CourseServices } from './course.service';
-import { AdminServices } from '../admin/admin.service';
-import AppError from '../../errors/AppError';
 
 const getCourses = catchAsync(async (req, res) => {
     const result = await CourseServices.getCourses(req.query);
