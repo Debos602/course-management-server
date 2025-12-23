@@ -42,7 +42,7 @@ router.route('/batches/:batchId').get((0, auth_1.default)(student_constant_1.USE
 // Enrollments
 router.route('/courses/:courseId/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getEnrollmentsForCourse);
 router.route('/batches/:batchId/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getEnrollmentsForBatch);
-router.route('/enrollments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getAllEnrollments);
+router.route('/enrolled').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN, student_constant_1.USER_ROLE.USER), admin_controller_1.AdminControllers.getAllEnrollments);
 // Assignment review
 router.route('/courses/:courseId/assignments').get((0, auth_1.default)(student_constant_1.USER_ROLE.ADMIN), admin_controller_1.AdminControllers.getAssignmentsForCourse);
 exports.AdminRoutes = router;
