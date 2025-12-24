@@ -27,7 +27,7 @@ app.get('/', (_req: Request, res: Response) => {
     res.status(httpStatus.OK).json({
         success: true,
         statusCode: 200,
-        message: 'Tech tips server is running successfully!',
+        message: 'course management server is running successfully!',
     });
 });
 
