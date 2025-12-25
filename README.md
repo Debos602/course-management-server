@@ -2,7 +2,7 @@
 🌐 Live API URL: https://course-management-dashboard-eight.vercel.app
 🖥 Client (Frontend): https://course-management-landing-page.vercel.app
 📦 Server Repository: https://github.com/Debos602/course-management-server
- (example)
+
 ## 📘 Introduction
 
 The Course Management Backend API is a scalable and secure server-side application designed to power a complete course management platform.
