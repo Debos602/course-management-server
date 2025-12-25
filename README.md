@@ -1,130 +1,182 @@
-# Pawsome | Pet Care Tips & Heartwarming Stories
+# 🎓 Course Management | Backend API
+🌐 Live API URL: https://course-management-dashboard-eight.vercel.app
+🖥 Client (Frontend): https://course-management-landing-page.vercel.app
+📦 Server Repository: https://github.com/Debos602/course-management-server
+ (example)
+## 📘 Introduction
 
-### [Live URL](https://pawsome-client.vercel.app) | [Base URL (Server)](https://pawsome-server.vercel.app)
+The Course Management Backend API is a scalable and secure server-side application designed to power a complete course management platform.
+It provides robust APIs for managing courses, lessons, quizzes, batches, enrollments, and users with proper authentication and authorization.
 
-### [Frontend Repository](https://github.com/saifscripts/pawsome-client)
+This backend serves both:
 
-## Introduction
+Public Landing Page (course listing & details)
 
-Pawsome is a comprehensive platform designed to provide pet owners with valuable resources, expert advice, and a community-driven space to better care for their pets. This project aims to bridge the gap between pet owners and essential pet care information, fostering a community where users can access premium content, share experiences, and find guidance on a range of topics, from health and nutrition to training and daily care.
+Admin / Instructor Dashboard (course & content management)
 
-## Project Description
+## 🧩 Project Description
 
-The Pawsome platform offers users access to a mix of free and premium content, including detailed guides, tips, and personalized advice tailored to various types of pets. Users can choose between different subscription plans to unlock premium content and gain exclusive insights from pet care experts.
+The Course Management system enables administrators and instructors to create and manage educational content, while students can browse courses, enroll, and access learning materials.
 
-## Technology Used
+The API is built with a clean architecture, role-based access control, and optimized database queries to ensure performance, security, and maintainability.
 
--   **Programming Language**: TypeScript
--   **Framework**: Express.js
--   **Database**: MongoDB
--   **ODM**: Mongoose
--   **Validation Library**: Zod
--   **Authentication**: JSON Web Tokens (JWT)
+## 🛠 Technology Used
 
-## Features
+Programming Language: TypeScript
 
--   User Authentication & Authorization
+Runtime: Node.js
 
-    -   Secure Registration and Login System
-    -   Role-Based Access Control (Admin and User roles)
-    -   Profile Management and Updates
+Framework: Express.js
 
--   Content Management
+Database: MongoDB
 
-    -   Create, Read, Update, and Delete Posts
-    -   Premium Content Access Control
-    -   Comment System for Community Engagement
-    -   Rich Media Support with Image Upload
+ODM: Mongoose
 
--   Payment Integration
+Validation Library: Zod
 
-    -   Subscription Plan Management
-    -   Secure Payment Processing via AmarPay
-    -   Premium Content Access Control
+Authentication: JSON Web Tokens (JWT)
 
--   User Experience
-    -   Email Notifications via Nodemailer
-    -   Input Validation and Error Handling
-    -   Responsive API Design
-    -   User Profile Customization
+Password Hashing: bcrypt
 
-# Setup Instruction
+File Upload: Cloudinary
 
-Follow this step-by-step guide to run the server on your local machine.
+Email Service: Nodemailer
 
-### 1. Clone the Repository
+## 🚀 Features
+###🔐 Authentication & Authorization
 
-First, clone the repository to your machine using the following command:
+Secure user registration & login
 
-```
-git clone https://github.com/saifscripts/pawsome-server.git
-```
+JWT-based access & refresh token system
 
-### 2. Change Directory
+Role-based access control (Admin, Instructor, Student)
 
-Next, navigate to the project directory with this command:
+Password reset & email verification support
 
-```
-cd pawsome-server
-```
+##📚 Course Management
 
-### 3. Install Dependencies
+Create, update, delete, and publish courses
 
-Before running the app, you need to install all dependencies. You can do this using either Yarn or npm.
+Course categorization & tagging
 
-#### Using Yarn
+Course pricing (Free / Paid)
 
-```
+Course thumbnail & media upload
+
+## 🧠 Lesson & Quiz Management
+
+CRUD operations for lessons
+
+Quiz creation with questions & answers
+
+Marks, duration, and explanations support
+
+Quiz publish/unpublish control
+
+##👥 Batch & Enrollment System
+
+Batch creation and assignment
+
+Student enrollment management
+
+Course-to-batch relationship handling
+
+## 📊 Dashboard Support
+
+Optimized APIs for admin dashboard
+
+Pagination, filtering, and sorting
+
+Lazy-loading friendly endpoints
+
+## 🧪 Developer Experience
+
+Centralized error handling
+
+Input validation with Zod
+
+Clean modular folder structure
+
+RESTful API design
+
+## 📂 Folder Structure (Simplified)
+src/
+├─ app/
+│  ├─ modules/
+│  │  ├─ auth/
+│  │  ├─ user/
+│  │  ├─ course/
+│  │  ├─ lesson/
+│  │  ├─ quiz/
+│  │  ├─ batch/
+│  │  └─ enrollment/
+│  ├─ middlewares/
+│  ├─ routes/
+│  ├─ utils/
+│  └─ config/
+├─ server.ts
+└─ app.ts
+
+## ⚙️ Setup Instruction
+
+Follow the steps below to run the server locally.
+
+1️⃣ Clone the Repository
+git clone https://github.com/Debos602/course-management-server.git
+
+2️⃣ Change Directory
+cd course-management-server
+
+3️⃣ Install Dependencies
+Using Yarn
 yarn install
-```
 
-#### Using npm
-
-```
+Using npm
 npm install --legacy-peer-deps
-```
 
-### 4. Add a .env File
+4️⃣ Configure Environment Variables
 
-To run the app, create a `.env` file in the root folder with the following properties (I have included a few demo values here for testing):
+Create a .env file in the root directory and add the following:
 
-```
 NODE_ENV=development
 PORT=5000
-DB_URI=mongodb://localhost:27017/bike-rental
+DB_URI=mongodb://localhost:27017/course-management
+
 BASE_URL=http://localhost:5000
-CLIENT_BASE_URL=http://localhost:3000
+CLIENT_BASE_URL=http://localhost:5173
+
 BCRYPT_SALT_ROUNDS=12
-JWT_ACCESS_SECRET=demo_secret
-JWT_REFRESH_SECRET=demo_secret
-JWT_RESET_SECRET=demo_secret
+
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
 JWT_ACCESS_EXP_IN=7d
 JWT_REFRESH_EXP_IN=365d
-JWT_RESET_EXP_IN=10M
-STORE_ID=aamarpaytest
-SIGNATURE_KEY=your_signature_key
-PAYMENT_BASE_URL=https://sandbox.aamarpay.com
-MAIL_AUTH_USER=email
-MAIL_AUTH_PASS=your_mail_auth_pass
+
+MAIL_AUTH_USER=your_email
+MAIL_AUTH_PASS=your_email_password
+
 CLOUDINARY_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-```
 
-### 5. Run the App
-
-Now, you're ready to run the app. Use one of the following commands to start the server.
-
-#### Using Yarn
-
-```
+5️⃣ Run the Server
+Using Yarn
 yarn dev
-```
 
-#### Using npm
-
-```
+Using npm
 npm run dev
-```
 
-That's it! The application should now be running locally.
+6️⃣ Server Running At
+http://localhost:5000
+
+## 🔮 Future Improvements
+
+Certificate generation
+
+Progress tracking & analytics
+
+Payment gateway integration
+
+Notification system
+
+GraphQL support
